@@ -4,8 +4,52 @@ const { pool } = require('./db');
 
 const router = express.Router();
 
-// Protect every /admin route with a single username/password pair set via
-// environment variables in Render (see README). Never hardcode credentials.
+// Logout must be registered BEFORE the basicAuth middleware below, so the
+// browser can reach it without needing to already be authenticated.
+//
+// HTTP Basic Auth has no real server-side session to end — the browser just
+// keeps re-sending the credentials it has cached. This route always replies
+// 401 with a fresh challenge, which makes most browsers drop the cached
+// credentials for this realm. It's the standard best-effort trick, not a
+// guarantee on every browser — closing the browser/tab (or clearing site
+// data) is the one fully reliable way to sign out.
+router.get('/logout', (req, res) => {
+  res
+    .set('WWW-Authenticate', 'Basic realm="RENI Tech Admin", charset="UTF-8"')
+    .status(401)
+    .set('Content-Type', 'text/html')
+    .send(`<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Signed out — RENI Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#201F1E;--surface:#2B2927;--line:#413E3A;--gold:#FFCB74;--gold-deep:#E3A947;--text:#F6F4F1;--muted:#B0A99E;--on-gold:#211C10;}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:36px;max-width:360px;text-align:center;}
+  .mark{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#FFDA9B,var(--gold-deep));display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:18px;color:var(--on-gold);margin:0 auto 18px;}
+  h1{font-family:'Space Grotesk',sans-serif;font-size:19px;margin-bottom:10px;}
+  p{color:var(--muted);font-size:14px;line-height:1.55;margin-bottom:22px;}
+  a{display:inline-block;background:linear-gradient(135deg,#FFDA9B,var(--gold));color:var(--on-gold);padding:11px 22px;border-radius:10px;font-weight:600;font-size:14px;text-decoration:none;}
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="mark">R</div>
+    <h1>Signed out</h1>
+    <p>You've been signed out of RENI Admin. If your browser still logs you back in automatically, close this tab (or the browser) to fully clear it.</p>
+    <a href="/admin">Back to sign in</a>
+  </div>
+</body>
+</html>`);
+});
+
+// Protect every remaining /admin route with a single username/password pair
+// set via environment variables in Render (see README). Never hardcode credentials.
 router.use(
   basicAuth({
     users: { [process.env.ADMIN_USER || 'admin']: process.env.ADMIN_PASSWORD || 'change-me-now' },
@@ -135,9 +179,12 @@ a{color:var(--gold);}
 .brand-mark{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,#FFDA9B,var(--gold-deep));display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:700;font-size:16px;color:var(--on-gold);}
 .brand h1{font-family:var(--display);font-weight:700;font-size:22px;letter-spacing:-0.3px;}
 .brand .sub{font-family:var(--mono);font-size:11px;letter-spacing:1.6px;color:var(--muted-2);text-transform:uppercase;margin-top:2px;}
+.topbar-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
 .live-pill{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11.5px;color:var(--muted);background:var(--surface);border:1px solid var(--line);padding:8px 14px;border-radius:100px;}
 .live-dot{width:6px;height:6px;border-radius:50%;background:#8FC896;box-shadow:0 0 0 3px rgba(143,200,150,0.15);animation:pulse 2s infinite;}
 @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.4;}}
+.logout-btn{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:500;color:var(--muted);background:var(--surface);border:1px solid var(--line);padding:9px 15px;border-radius:100px;text-decoration:none;transition:all .18s ease;}
+.logout-btn:hover{border-color:#E68D82;color:#E68D82;}
 
 .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:26px;}
 @media (max-width:900px){.stats-row{grid-template-columns:repeat(2,1fr);}}
@@ -201,7 +248,13 @@ tr:last-child td{border-bottom:none;}
         <div class="sub">Submissions</div>
       </div>
     </div>
-    <div class="live-pill"><span class="live-dot"></span> Live from database</div>
+    <div class="topbar-actions">
+      <div class="live-pill"><span class="live-dot"></span> Live from database</div>
+      <a class="logout-btn" href="/admin/logout">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>
+        Log Out
+      </a>
+    </div>
   </div>
 
   <div class="stats-row">
