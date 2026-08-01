@@ -6,13 +6,14 @@ if (!process.env.DATABASE_URL) {
   console.error('Missing DATABASE_URL environment variable. Add a PostgreSQL database in Render and link it to this service.');
 }
 
+const isLocal = (process.env.DATABASE_URL || '').includes('localhost')
+  || (process.env.DATABASE_URL || '').includes('127.0.0.1');
+
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  // Render's internal Postgres connections don't require SSL, but external/
-  // some regions do. This setting works for both without failing locally.
-  ssl: process.env.DATABASE_URL && process.env.DATABASE_URL.includes('render.com')
-    ? { rejectUnauthorized: false }
-    : false
+  // Managed Postgres providers (Supabase, Render's own Postgres, etc.)
+  // require SSL. Only skip it for a local database during development.
+  ssl: isLocal ? false : { rejectUnauthorized: false }
 });
 
 async function initDb() {
