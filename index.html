@@ -25,8 +25,6 @@
 --highlight:#FFCB74;
 --on-gold:#232120;
 --radius:14px;
---good:#7FBF7F;
---bad:#E5847A;
 --display:'Space Grotesk',sans-serif;
 --body:'Inter',sans-serif;
 --mono:'JetBrains Mono',monospace;
@@ -56,7 +54,6 @@ img{max-width:100%;display:block;}
 @media (max-width:768px){.wrap{padding:0 20px;}}
 ::selection{background:var(--teal);color:var(--on-gold);}
 :focus-visible{outline:2px solid var(--teal);outline-offset:3px;}
-button{font-family:inherit;}
 /* ---------- NAV ---------- */
 header{
 position:fixed;top:0;left:0;right:0;z-index:1000;
@@ -72,6 +69,7 @@ padding:14px 0;
 border-bottom:1px solid var(--line);
 }
 nav{display:flex;align-items:center;justify-content:space-between;}
+/* ---------- LOGO LOCKUP (transparent mark + text wordmark) ---------- */
 .logo-brand{
 display:inline-flex;align-items:center;gap:13px;
 transition:transform .3s ease, opacity .3s ease;
@@ -162,12 +160,11 @@ opacity:0;transform:translateY(20px);
 .hero-btns{display:flex;gap:16px;margin-top:40px;flex-wrap:wrap;opacity:0;transform:translateY(20px);}
 .btn{
 padding:16px 30px;border-radius:100px;font-weight:600;font-size:15px;
-display:inline-flex;align-items:center;gap:10px;transition:transform .25s ease, box-shadow .25s ease, background .25s ease, opacity .25s ease;
+display:inline-flex;align-items:center;gap:10px;transition:transform .25s ease, box-shadow .25s ease, background .25s ease;
 cursor:pointer;border:none;font-family:var(--body);
 }
 .btn-primary{background:linear-gradient(135deg,#FFDA9B,var(--teal));color:var(--on-gold);box-shadow:0 4px 16px rgba(255,203,116,0.15);}
 .btn-primary:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(255,203,116,0.35);}
-.btn-primary:disabled{opacity:0.55;cursor:not-allowed;transform:none;box-shadow:none;}
 .btn-secondary{background:rgba(255,255,255,0.02);color:var(--text);border:1px solid var(--line);}
 .btn-secondary:hover{border-color:var(--teal);background:rgba(255,203,116,0.1);transform:translateY(-3px);}
 .scroll-cue{
@@ -230,7 +227,7 @@ content:'';position:absolute;inset:0;opacity:0;transition:opacity .5s ease;
 .pillar-list{margin-top:28px;position:relative;z-index:1;}
 .pillar-list li{list-style:none;padding:12px 0;border-top:1px solid var(--line);color:var(--muted);font-size:15px;display:flex;justify-content:space-between;align-items:center;}
 .pillar-list li:hover{color:var(--text);}
-.pillar-arrow{position:relative;z-index:1;margin-top:32px;display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:14.5px;background:none;border:none;cursor:pointer;padding:0;}
+.pillar-arrow{position:relative;z-index:1;margin-top:32px;display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:14.5px;}
 .pillar.marketing .pillar-arrow{color:var(--gold);}
 .pillar.it .pillar-arrow{color:var(--violet);}
 .pillar-arrow svg{transition:transform .3s ease;}
@@ -285,28 +282,6 @@ display:flex;flex-direction:column;justify-content:center;height:100%;
 .calc-result-label{font-family:var(--mono);font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);}
 .calc-result-num{font-family:var(--mono);font-weight:500;font-size:clamp(32px,4vw,46px);color:var(--highlight);margin:16px 0;transition:all .3s ease;}
 .calc-result-note{font-size:13px;color:var(--muted-2);margin-bottom:24px;}
-/* ---------- FORMS (contact + quote request) ---------- */
-.form-field{margin-bottom:16px;text-align:left;}
-.form-field label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px;font-family:var(--mono);letter-spacing:.3px;}
-.form-field input,.form-field textarea{
-width:100%;padding:13px 14px;border-radius:10px;border:1px solid var(--line);
-background:var(--bg-deep);color:var(--text);font-family:var(--body);font-size:14.5px;
-transition:border-color .2s ease, background .2s ease;
-}
-.form-field input:focus,.form-field textarea:focus{border-color:var(--teal);outline:none;background:rgba(255,203,116,0.04);}
-.form-field textarea{resize:vertical;min-height:100px;}
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
-@media (max-width:560px){.form-row{grid-template-columns:1fr;}}
-.form-status{margin-top:14px;font-size:14px;min-height:20px;}
-.form-status.success{color:var(--good);}
-.form-status.error{color:var(--bad);}
-.contact-form{
-max-width:640px;margin:56px auto 0;background:var(--surface);border:1px solid var(--line);
-border-radius:20px;padding:40px;text-align:left;box-shadow:0 24px 48px rgba(0,0,0,0.3);
-}
-@media (max-width:560px){.contact-form{padding:28px 22px;}}
-.contact-form h3{font-family:var(--display);font-size:22px;margin-bottom:4px;}
-.quote-form{margin-top:20px;text-align:left;}
 /* ---------- COUNTRIES ---------- */
 .countries{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;}
 @media (max-width:768px){.countries{grid-template-columns:repeat(2,1fr);}}
@@ -331,17 +306,56 @@ box-shadow:0 30px 60px rgba(0,0,0,0.3);
 .proof-stat-label{font-size:13px;color:var(--muted);margin-top:4px;}
 .proof-attr{margin-top:36px;font-size:14.5px;color:var(--muted);}
 .proof-attr b{color:var(--text);}
-/* ---------- FINAL CTA ---------- */
+/* ---------- FINAL CTA / FORMS ---------- */
 .final-cta{text-align:center;}
 .final-cta h2{font-family:var(--display);font-size:clamp(32px,5vw,56px);font-weight:600;letter-spacing:-1px;max-width:16ch;margin:0 auto;}
 .final-cta p{color:var(--muted);margin-top:20px;font-size:17px;}
 .final-btns{display:flex;gap:16px;justify-content:center;margin-top:36px;flex-wrap:wrap;}
+.form-tabs{display:flex;justify-content:center;gap:10px;margin-top:48px;flex-wrap:wrap;}
+.form-tab{
+padding:11px 24px;border-radius:100px;font-size:14px;font-weight:600;cursor:pointer;
+border:1px solid var(--line);background:rgba(255,255,255,0.02);color:var(--muted);
+transition:all .25s ease;
+}
+.form-tab.active{background:linear-gradient(135deg,#FFDA9B,var(--teal));color:var(--on-gold);border-color:transparent;}
+.form-panel{
+display:none;text-align:left;max-width:640px;margin:32px auto 0;
+background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:40px;
+box-shadow:0 24px 48px rgba(0,0,0,0.3);
+}
+.form-panel.active{display:block;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;}
+@media (max-width:560px){.form-row{grid-template-columns:1fr;}}
+.form-field{margin-bottom:16px;}
+.form-field label{display:block;font-size:13px;color:var(--muted);margin-bottom:8px;font-weight:500;}
+.form-field input,.form-field textarea,.form-field select{
+width:100%;background:var(--bg-deep);border:1px solid var(--line);border-radius:10px;
+padding:13px 16px;color:var(--text);font-family:var(--body);font-size:14.5px;
+transition:border-color .25s ease;
+}
+.form-field input:focus,.form-field textarea:focus,.form-field select:focus{
+outline:none;border-color:var(--teal);
+}
+.form-field textarea{resize:vertical;min-height:100px;}
+.checkbox-group{display:flex;flex-wrap:wrap;gap:10px;margin-top:4px;}
+.checkbox-chip{
+display:flex;align-items:center;gap:8px;padding:9px 14px;border-radius:100px;
+border:1px solid var(--line);font-size:13px;color:var(--muted);cursor:pointer;
+transition:all .2s ease;
+}
+.checkbox-chip input{width:auto;accent-color:var(--teal);}
+.checkbox-chip:has(input:checked){border-color:var(--teal);color:var(--text);background:rgba(255,203,116,0.1);}
+.form-honeypot{position:absolute;left:-9999px;opacity:0;height:0;width:0;}
+.form-submit{width:100%;justify-content:center;margin-top:8px;}
+.form-status{margin-top:14px;font-size:14px;text-align:center;min-height:20px;}
+.form-status.ok{color:#8fd19e;}
+.form-status.err{color:#e08a8a;}
 /* ---------- FOOTER ---------- */
 footer{border-top:1px solid var(--line);padding:56px 0 32px;}
 .footer-top{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:32px;margin-bottom:40px;}
 .footer-links{display:flex;gap:56px;flex-wrap:wrap;}
 .footer-col h6{font-family:var(--mono);font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--muted-2);margin-bottom:16px;}
-.footer-col a{display:block;font-size:14px;color:var(--muted);padding:6px 0;transition:color .2s ease;background:none;border:none;text-align:left;cursor:pointer;}
+.footer-col a{display:block;font-size:14px;color:var(--muted);padding:6px 0;transition:color .2s ease;}
 .footer-col a:hover{color:var(--teal);}
 .footer-bottom{border-top:1px solid var(--line);padding-top:24px;display:flex;justify-content:space-between;color:var(--muted-2);font-size:13px;flex-wrap:wrap;gap:12px;}
 /* ---------- WHATSAPP + DARK TOGGLE ---------- */
@@ -365,7 +379,6 @@ animation:ripple 2.2s infinite;z-index:-1;
 </head>
 <body>
 <canvas id="hero-canvas" aria-hidden="true"></canvas>
-
 <header id="siteHeader">
 <div class="wrap">
 <nav>
@@ -519,61 +532,44 @@ animation:ripple 2.2s infinite;z-index:-1;
 <div class="section-head reveal-r">
 <p class="section-eyebrow">No "contact us for pricing"</p>
 <h2>Get an instant estimate.</h2>
-<p>Pick what you need. See a real range immediately — no form, no wait. Prices in Indian Rupees (₹).</p>
+<p>Pick what you need. See a real range immediately — no form, no wait.</p>
 </div>
 <div class="calc">
 <div class="reveal-l">
 <h3>Build your package</h3>
 <p class="calc-sub">Select any combination below</p>
 <div id="calcOptions">
-<div class="calc-opt" data-price="29000" data-name="Website / Desktop App">
+<div class="calc-opt" data-price="350" data-name="Website / Desktop App">
 <div class="calc-opt-label"><span class="checkbox"></span> Custom Web &amp; Desktop App</div>
-<span class="calc-opt-price">from ₹29,000</span>
+<span class="calc-opt-price">from $350</span>
 </div>
-<div class="calc-opt" data-price="20000" data-name="SEO">
+<div class="calc-opt" data-price="250" data-name="SEO">
 <div class="calc-opt-label"><span class="checkbox"></span> SEO &amp; Online Visibility</div>
-<span class="calc-opt-price">from ₹20,000/mo</span>
+<span class="calc-opt-price">from $250/mo</span>
 </div>
-<div class="calc-opt" data-price="22000" data-name="Social & Campaigns">
+<div class="calc-opt" data-price="280" data-name="Social & Campaigns">
 <div class="calc-opt-label"><span class="checkbox"></span> Social Media &amp; Campaign Management</div>
-<span class="calc-opt-price">from ₹22,000/mo</span>
+<span class="calc-opt-price">from $280/mo</span>
 </div>
-<div class="calc-opt" data-price="35000" data-name="API / Automation">
+<div class="calc-opt" data-price="450" data-name="API / Automation">
 <div class="calc-opt-label"><span class="checkbox"></span> API Integration &amp; Automation</div>
-<span class="calc-opt-price">from ₹35,000</span>
+<span class="calc-opt-price">from $450</span>
 </div>
-<div class="calc-opt" data-price="40000" data-name="Custom Software">
+<div class="calc-opt" data-price="500" data-name="Custom Software">
 <div class="calc-opt-label"><span class="checkbox"></span> Full-Stack / Custom Software</div>
-<span class="calc-opt-price">from ₹40,000</span>
+<span class="calc-opt-price">from $500</span>
 </div>
-<div class="calc-opt" data-price="24000" data-name="Branding">
+<div class="calc-opt" data-price="300" data-name="Branding">
 <div class="calc-opt-label"><span class="checkbox"></span> Visual Branding &amp; Content</div>
-<span class="calc-opt-price">from ₹24,000</span>
+<span class="calc-opt-price">from $300</span>
 </div>
 </div>
 </div>
 <div class="calc-result reveal-r tilt-3d">
 <p class="calc-result-label">Estimated Range</p>
-<div class="calc-result-num" id="calcResult">₹0</div>
+<div class="calc-result-num" id="calcResult">$0</div>
 <p class="calc-result-note" id="calcNote">Select services to see your estimate</p>
-<button type="button" class="btn btn-primary" id="requestQuoteBtn" style="justify-content:center;width:100%;">Request Exact Quote</button>
-
-<form id="quoteForm" class="quote-form" style="display:none;">
-<div class="form-field">
-<label for="qf-name">Your name</label>
-<input type="text" id="qf-name" required autocomplete="name">
-</div>
-<div class="form-field">
-<label for="qf-email">Email</label>
-<input type="email" id="qf-email" required autocomplete="email">
-</div>
-<div class="form-field">
-<label for="qf-phone">Phone (optional)</label>
-<input type="tel" id="qf-phone" autocomplete="tel">
-</div>
-<button type="submit" class="btn btn-primary" id="qf-submit" style="justify-content:center;width:100%;">Submit Request</button>
-<p class="form-status" id="qf-status" role="status" aria-live="polite"></p>
-</form>
+<a href="#contact" class="btn btn-primary" style="justify-content:center;" onclick="selectFormTab('quote')">Request Exact Quote</a>
 </div>
 </div>
 </div>
@@ -612,35 +608,92 @@ animation:ripple 2.2s infinite;z-index:-1;
 <div class="wrap">
 <h2 class="reveal-l" style="margin:0 auto;">Ready to grow, or ready to build?</h2>
 <p class="reveal-r">Tell us which — we'll bring the right minds on the team to it within a day.</p>
-<div class="final-btns reveal-l">
-<a href="https://wa.me/919849875648" target="_blank" rel="noopener" class="btn btn-primary">Chat on WhatsApp</a>
-<a href="mailto:reninow1906@gmail.com" class="btn btn-secondary">Email Us</a>
+
+<div class="form-tabs">
+<div class="form-tab active" id="tabContact" onclick="selectFormTab('contact')">General Inquiry</div>
+<div class="form-tab" id="tabQuote" onclick="selectFormTab('quote')">Request a Quote</div>
 </div>
 
-<form id="contactForm" class="contact-form reveal-r" novalidate>
-<h3>Send us a message</h3>
-<p class="calc-sub">We usually reply within a day.</p>
+<!-- CONTACT FORM -->
+<form class="form-panel active" id="formContact">
 <div class="form-row">
 <div class="form-field">
-<label for="cf-name">Name</label>
-<input type="text" id="cf-name" name="name" required autocomplete="name">
+<label for="c_name">Name</label>
+<input type="text" id="c_name" name="name" required maxlength="200" placeholder="Your name">
 </div>
 <div class="form-field">
-<label for="cf-email">Email</label>
-<input type="email" id="cf-email" name="email" required autocomplete="email">
+<label for="c_email">Email</label>
+<input type="email" id="c_email" name="email" required placeholder="you@company.com">
 </div>
 </div>
 <div class="form-field">
-<label for="cf-phone">Phone (optional)</label>
-<input type="tel" id="cf-phone" name="phone" autocomplete="tel">
+<label for="c_phone">Phone <span style="opacity:.6;">(optional)</span></label>
+<input type="tel" id="c_phone" name="phone" maxlength="40" placeholder="+91 ...">
 </div>
 <div class="form-field">
-<label for="cf-message">What do you need help with?</label>
-<textarea id="cf-message" name="message" rows="4"></textarea>
+<label for="c_message">Message</label>
+<textarea id="c_message" name="message" required maxlength="5000" placeholder="Tell us a bit about what you need"></textarea>
 </div>
-<button type="submit" class="btn btn-primary" id="cf-submit" style="width:100%;justify-content:center;">Send Message</button>
-<p class="form-status" id="cf-status" role="status" aria-live="polite"></p>
+<input type="text" name="website" class="form-honeypot" tabindex="-1" autocomplete="off">
+<button type="submit" class="btn btn-primary form-submit">Send Message</button>
+<p class="form-status" id="c_status"></p>
 </form>
+
+<!-- QUOTE REQUEST FORM -->
+<form class="form-panel" id="formQuote">
+<div class="form-row">
+<div class="form-field">
+<label for="q_name">Name</label>
+<input type="text" id="q_name" name="name" required maxlength="200" placeholder="Your name">
+</div>
+<div class="form-field">
+<label for="q_email">Email</label>
+<input type="email" id="q_email" name="email" required placeholder="you@company.com">
+</div>
+</div>
+<div class="form-row">
+<div class="form-field">
+<label for="q_phone">Phone <span style="opacity:.6;">(optional)</span></label>
+<input type="tel" id="q_phone" name="phone" maxlength="40" placeholder="+91 ...">
+</div>
+<div class="form-field">
+<label for="q_company">Company <span style="opacity:.6;">(optional)</span></label>
+<input type="text" id="q_company" name="company" maxlength="200" placeholder="Company name">
+</div>
+</div>
+<div class="form-field">
+<label>Services you're interested in</label>
+<div class="checkbox-group">
+<label class="checkbox-chip"><input type="checkbox" name="services" value="Custom Web & Desktop App"> Web / Desktop App</label>
+<label class="checkbox-chip"><input type="checkbox" name="services" value="SEO"> SEO</label>
+<label class="checkbox-chip"><input type="checkbox" name="services" value="Social & Campaigns"> Social &amp; Campaigns</label>
+<label class="checkbox-chip"><input type="checkbox" name="services" value="API / Automation"> API / Automation</label>
+<label class="checkbox-chip"><input type="checkbox" name="services" value="Custom Software"> Custom Software</label>
+<label class="checkbox-chip"><input type="checkbox" name="services" value="Branding"> Branding</label>
+</div>
+</div>
+<div class="form-field">
+<label for="q_budget">Rough budget <span style="opacity:.6;">(optional)</span></label>
+<select id="q_budget" name="budget">
+<option value="">Prefer not to say</option>
+<option value="Under $500">Under $500</option>
+<option value="$500 – $2,000">$500 – $2,000</option>
+<option value="$2,000 – $5,000">$2,000 – $5,000</option>
+<option value="$5,000+">$5,000+</option>
+</select>
+</div>
+<div class="form-field">
+<label for="q_message">Project details</label>
+<textarea id="q_message" name="message" required maxlength="5000" placeholder="What are you trying to build or grow?"></textarea>
+</div>
+<input type="text" name="website" class="form-honeypot" tabindex="-1" autocomplete="off">
+<button type="submit" class="btn btn-primary form-submit">Request Quote</button>
+<p class="form-status" id="q_status"></p>
+</form>
+
+<div class="final-btns reveal-l" style="margin-top:40px;">
+<a href="#" class="btn btn-secondary" id="whatsappCta">Chat on WhatsApp</a>
+</div>
 </div>
 </section>
 
@@ -657,17 +710,17 @@ animation:ripple 2.2s infinite;z-index:-1;
 <div class="footer-links">
 <div class="footer-col">
 <h6>Marketing</h6>
-<a href="#pillars">Social Media Strategy</a>
-<a href="#pillars">SEO &amp; Visibility</a>
-<a href="#calculator">Campaign Planning</a>
-<a href="#pillars">Visual Branding</a>
+<a href="#">Social Media Strategy</a>
+<a href="#">SEO &amp; Visibility</a>
+<a href="#">Campaign Planning</a>
+<a href="#">Visual Branding</a>
 </div>
 <div class="footer-col">
 <h6>IT Solutions</h6>
-<a href="#pillars">Web &amp; Desktop Apps</a>
-<a href="#pillars">Full-Stack Development</a>
-<a href="#calculator">API Integration</a>
-<a href="#pillars">IT Consulting</a>
+<a href="#">Web &amp; Desktop Apps</a>
+<a href="#">Full-Stack Development</a>
+<a href="#">API Integration</a>
+<a href="#">IT Consulting</a>
 </div>
 <div class="footer-col">
 <h6>Company</h6>
@@ -690,11 +743,8 @@ animation:ripple 2.2s infinite;z-index:-1;
 </div>
 
 <script>
-// Same-origin backend: leave as '' when the frontend is served by the Express
-// server in this project. If you host the frontend separately, set this to
-// your backend's full URL, e.g. 'https://your-backend.onrender.com'
-const API_BASE = '';
-const WHATSAPP_NUMBER = '919849875648';
+// ---------- Backend API base — your Render service ----------
+const API_BASE = 'https://renitech-in.onrender.com';
 
 document.addEventListener('DOMContentLoaded', function(){
 gsap.registerPlugin(ScrollTrigger);
@@ -704,7 +754,6 @@ const header = document.getElementById('siteHeader');
 window.addEventListener('scroll', ()=>{
 header.classList.toggle('scrolled', window.scrollY > 40);
 });
-
 const navToggle = document.getElementById('navToggle');
 const navLinks = document.getElementById('navLinks');
 navToggle.addEventListener('click', ()=> navLinks.classList.toggle('open'));
@@ -719,7 +768,17 @@ tl.to('#heroEyebrow',{opacity:1,duration:.6},0.1)
 .to('#scrollCue',{opacity:1,duration:.6},1.3)
 .to('#hero-canvas',{opacity:1,duration:1.2},0.3);
 
-/* ---------- Scroll-triggered reveals for sections ---------- */
+/* ---------- Scroll-triggered reveals for sections ----------
+NOTE: these use scrub instead of toggleActions/duration. With
+toggleActions the tween always plays its own fixed duration
+(0.9–1.1s) whenever a trigger point is crossed — so scrolling
+back up fast (past several triggers) queues up a stack of
+still-finishing animations and the page visibly lags behind
+the scrollbar. Scrub locks each tween's progress directly to
+scroll position instead, so reverse-scrolling is instant and
+never falls behind, no matter how fast you scroll. The small
+scrub number (0.35) just adds a touch of smoothing so it
+doesn't feel mechanically linear. */
 gsap.utils.toArray('.reveal').forEach((el)=>{
 gsap.fromTo(el,
 {opacity:0, y:36},
@@ -743,11 +802,14 @@ map.get(parent).push(el);
 });
 return map;
 };
-
 ['.reveal-l','.reveal-r'].forEach(sel=>{
 const nodes = gsap.utils.toArray(sel);
 const byParent = groupByParent(nodes);
 byParent.forEach((els)=>{
+// Stagger is faked with a per-index scroll-position offset
+// (rather than a time-based stagger) so it still works with
+// scrub — each card's window starts/ends a little later than
+// the one before it, in scroll terms, not clock terms.
 els.forEach((el,i)=>{
 const offset = i*3;
 gsap.fromTo(el,
@@ -788,7 +850,6 @@ xTo(0); yTo(0); liftTo(0);
 });
 });
 }
-
 function reduceMotionCheck(){
 return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 }
@@ -813,144 +874,23 @@ const opts = document.querySelectorAll('.calc-opt');
 const resultEl = document.getElementById('calcResult');
 const noteEl = document.getElementById('calcNote');
 let total = 0;
-let selectedNames = [];
-
-function formatINR(n){
-return '₹' + Number(n).toLocaleString('en-IN');
-}
-
 opts.forEach(opt=>{
 opt.addEventListener('click', ()=>{
 opt.classList.toggle('active');
 total = 0;
-selectedNames = [];
+let names = [];
 opts.forEach(o=>{
 if(o.classList.contains('active')){
 total += parseInt(o.dataset.price,10);
-selectedNames.push(o.dataset.name);
+names.push(o.dataset.name);
 }
 });
 const low = total, high = Math.round(total*1.35);
 gsap.to({}, {duration:0.3, onUpdate:function(){
-resultEl.textContent = total === 0 ? '₹0' : `${formatINR(low)}–${formatINR(high)}`;
+resultEl.textContent = total === 0 ? '$0' : `$${low.toLocaleString()}–$${high.toLocaleString()}`;
 }});
-noteEl.textContent = selectedNames.length ? selectedNames.join(' + ') : 'Select services to see your estimate';
-// Hide the quote form again if the selection changes after it was opened
-quoteForm.style.display = 'none';
-qfStatus.textContent = '';
+noteEl.textContent = names.length ? names.join(' + ') : 'Select services to see your estimate';
 });
-});
-
-/* ---------- Request Exact Quote -> inline order form -> Supabase via backend ---------- */
-const requestQuoteBtn = document.getElementById('requestQuoteBtn');
-const quoteForm = document.getElementById('quoteForm');
-const qfStatus = document.getElementById('qf-status');
-const qfSubmit = document.getElementById('qf-submit');
-
-requestQuoteBtn.addEventListener('click', ()=>{
-if(total === 0){
-qfStatus.textContent = 'Please select at least one service above first.';
-qfStatus.className = 'form-status error';
-quoteForm.style.display = 'block';
-return;
-}
-quoteForm.style.display = quoteForm.style.display === 'none' ? 'block' : 'none';
-qfStatus.textContent = '';
-qfStatus.className = 'form-status';
-});
-
-quoteForm.addEventListener('submit', async (e)=>{
-e.preventDefault();
-if(total === 0){
-qfStatus.textContent = 'Please select at least one service above first.';
-qfStatus.className = 'form-status error';
-return;
-}
-const name = document.getElementById('qf-name').value.trim();
-const email = document.getElementById('qf-email').value.trim();
-const phone = document.getElementById('qf-phone').value.trim();
-
-if(!name || !email){
-qfStatus.textContent = 'Please fill in your name and email.';
-qfStatus.className = 'form-status error';
-return;
-}
-
-qfSubmit.disabled = true;
-qfStatus.textContent = 'Submitting your request...';
-qfStatus.className = 'form-status';
-
-try{
-const res = await fetch(`${API_BASE}/api/orders`, {
-method:'POST',
-headers:{'Content-Type':'application/json'},
-body: JSON.stringify({
-customer_name: name,
-customer_email: email,
-customer_phone: phone || null,
-services: selectedNames,
-estimate_low: total,
-estimate_high: Math.round(total*1.35)
-})
-});
-let data = {};
-try{ data = await res.json(); }catch(_){ data = {}; }
-if(!res.ok){
-throw new Error(data.error || `Request failed (${res.status}). Make sure the backend server is running (npm start) and you're viewing this page at its address, e.g. http://localhost:3000`);
-}
-qfStatus.textContent = 'Thanks! We\'ve received your request and will get back to you shortly.';
-qfStatus.className = 'form-status success';
-quoteForm.reset();
-}catch(err){
-qfStatus.textContent = err.message || 'Could not submit your request. Please try WhatsApp or email instead.';
-qfStatus.className = 'form-status error';
-}finally{
-qfSubmit.disabled = false;
-}
-});
-
-/* ---------- Contact form -> Supabase via backend ---------- */
-const contactForm = document.getElementById('contactForm');
-const cfStatus = document.getElementById('cf-status');
-const cfSubmit = document.getElementById('cf-submit');
-
-contactForm.addEventListener('submit', async (e)=>{
-e.preventDefault();
-const name = document.getElementById('cf-name').value.trim();
-const email = document.getElementById('cf-email').value.trim();
-const phone = document.getElementById('cf-phone').value.trim();
-const message = document.getElementById('cf-message').value.trim();
-
-if(!name || !email){
-cfStatus.textContent = 'Please fill in your name and email.';
-cfStatus.className = 'form-status error';
-return;
-}
-
-cfSubmit.disabled = true;
-cfStatus.textContent = 'Sending...';
-cfStatus.className = 'form-status';
-
-try{
-const res = await fetch(`${API_BASE}/api/contact`, {
-method:'POST',
-headers:{'Content-Type':'application/json'},
-body: JSON.stringify({ name, email, phone: phone || null, message: message || null })
-});
-let data = {};
-try{ data = await res.json(); }catch(_){ data = {}; }
-if(!res.ok){
-throw new Error(data.error || `Request failed (${res.status}). Make sure the backend server is running (npm start) and you're viewing this page at its address, e.g. http://localhost:3000`);
-}
-cfStatus.textContent = 'Message sent! We\'ll get back to you within a day.';
-cfStatus.className = 'form-status success';
-contactForm.reset();
-}catch(err){
-cfStatus.textContent = err.message || 'Could not send your message. Please try WhatsApp or email instead.';
-cfStatus.className = 'form-status error';
-}finally{
-cfSubmit.disabled = false;
-}
 });
 
 /* ---------- Three.js 3D node network hero ---------- */
@@ -961,10 +901,8 @@ camera.position.set(0,0,26);
 const renderer = new THREE.WebGLRenderer({canvas, alpha:true, antialias:true});
 renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
 renderer.setSize(window.innerWidth, window.innerHeight);
-
 const group = new THREE.Group();
 scene.add(group);
-
 const hubColors = [0xFFCB74, 0xE3A947, 0xD9D3C4, 0xFFCB74];
 const hubs = [];
 const hubPositions = [
@@ -973,7 +911,6 @@ new THREE.Vector3(-8,5,3),
 new THREE.Vector3(-6,-6,-1),
 new THREE.Vector3(7,-5,2)
 ];
-
 hubPositions.forEach((pos,i)=>{
 const geo = new THREE.SphereGeometry(0.35,20,20);
 const mat = new THREE.MeshBasicMaterial({color: hubColors[i]});
@@ -981,14 +918,12 @@ const mesh = new THREE.Mesh(geo,mat);
 mesh.position.copy(pos);
 group.add(mesh);
 hubs.push(mesh);
-
 const glowGeo = new THREE.SphereGeometry(0.7,16,16);
 const glowMat = new THREE.MeshBasicMaterial({color: hubColors[i], transparent:true, opacity:0.12});
 const glow = new THREE.Mesh(glowGeo, glowMat);
 glow.position.copy(pos);
 group.add(glow);
 });
-
 const smallNodes = [];
 const nodeGeo = new THREE.SphereGeometry(0.09,10,10);
 const nodeMat = new THREE.MeshBasicMaterial({color:0x8C8780, transparent:true, opacity:0.55});
@@ -1002,7 +937,6 @@ mesh.position.set(
 group.add(mesh);
 smallNodes.push(mesh);
 }
-
 function createArc(p1,p2,color){
 const mid = p1.clone().lerp(p2,0.5);
 mid.z += 6;
@@ -1012,13 +946,11 @@ const geo = new THREE.BufferGeometry().setFromPoints(points);
 const mat = new THREE.LineBasicMaterial({color, transparent:true, opacity:0.35});
 return new THREE.Line(geo, mat);
 }
-
 for(let i=0;i<hubPositions.length;i++){
 for(let j=i+1;j<hubPositions.length;j++){
 group.add(createArc(hubPositions[i], hubPositions[j], 0xFFCB74));
 }
 }
-
 smallNodes.forEach(n=>{
 let nearest = hubPositions[0], minD = Infinity;
 hubPositions.forEach(h=>{
@@ -1031,13 +963,11 @@ const mat = new THREE.LineBasicMaterial({color:0x524F49, transparent:true, opaci
 group.add(new THREE.Line(geo,mat));
 }
 });
-
 let mouseX = 0, mouseY = 0;
 window.addEventListener('mousemove', (e)=>{
 mouseX = (e.clientX / window.innerWidth - 0.5);
 mouseY = (e.clientY / window.innerHeight - 0.5);
 });
-
 let reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 function animate(t){
 requestAnimationFrame(animate);
@@ -1053,18 +983,84 @@ h.scale.set(s,s,s);
 renderer.render(scene, camera);
 }
 requestAnimationFrame(animate);
-
 window.addEventListener('resize', ()=>{
 camera.aspect = window.innerWidth/window.innerHeight;
 camera.updateProjectionMatrix();
 renderer.setSize(window.innerWidth, window.innerHeight);
 });
 
-/* ---------- WhatsApp FAB ---------- */
+/* ---------- WhatsApp FAB + CTA link ---------- */
 document.getElementById('waFab').addEventListener('click', ()=>{
-window.open(`https://wa.me/${WHATSAPP_NUMBER}`, '_blank');
+window.open('https://wa.me/', '_blank');
 });
+document.getElementById('whatsappCta').addEventListener('click', (e)=>{
+e.preventDefault();
+window.open('https://wa.me/', '_blank');
 });
+
+/* ---------- Contact / Quote form submission ---------- */
+async function submitForm(form, endpoint, statusEl, isQuote){
+const formData = new FormData(form);
+const payload = Object.fromEntries(formData.entries());
+if(isQuote){
+payload.services = formData.getAll('services');
+}
+statusEl.textContent = 'Sending...';
+statusEl.className = 'form-status';
+const submitBtn = form.querySelector('button[type="submit"]');
+submitBtn.disabled = true;
+try{
+const res = await fetch(`${API_BASE}${endpoint}`, {
+method:'POST',
+headers:{'Content-Type':'application/json'},
+body: JSON.stringify(payload)
+});
+const result = await res.json();
+if(res.ok){
+statusEl.textContent = "Thanks — we'll be in touch shortly.";
+statusEl.className = 'form-status ok';
+form.reset();
+}else{
+statusEl.textContent = (result.errors && result.errors.join(' ')) || 'Something went wrong. Please try again.';
+statusEl.className = 'form-status err';
+}
+}catch(err){
+statusEl.textContent = 'Network error — please try again in a moment.';
+statusEl.className = 'form-status err';
+}finally{
+submitBtn.disabled = false;
+}
+}
+
+document.getElementById('formContact').addEventListener('submit', (e)=>{
+e.preventDefault();
+submitForm(e.target, '/api/contact', document.getElementById('c_status'), false);
+});
+document.getElementById('formQuote').addEventListener('submit', (e)=>{
+e.preventDefault();
+submitForm(e.target, '/api/quote', document.getElementById('q_status'), true);
+});
+
+});
+
+/* ---------- Tab switching between the two forms ---------- */
+function selectFormTab(which){
+const tabContact = document.getElementById('tabContact');
+const tabQuote = document.getElementById('tabQuote');
+const formContact = document.getElementById('formContact');
+const formQuote = document.getElementById('formQuote');
+if(which === 'quote'){
+tabQuote.classList.add('active');
+tabContact.classList.remove('active');
+formQuote.classList.add('active');
+formContact.classList.remove('active');
+}else{
+tabContact.classList.add('active');
+tabQuote.classList.remove('active');
+formContact.classList.add('active');
+formQuote.classList.remove('active');
+}
+}
 </script>
 </body>
 </html>
