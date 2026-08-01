@@ -893,9 +893,10 @@ estimate_low: total,
 estimate_high: Math.round(total*1.35)
 })
 });
-const data = await res.json();
+let data = {};
+try{ data = await res.json(); }catch(_){ data = {}; }
 if(!res.ok){
-throw new Error(data.error || 'Something went wrong.');
+throw new Error(data.error || `Request failed (${res.status}). Make sure the backend server is running (npm start) and you're viewing this page at its address, e.g. http://localhost:3000`);
 }
 qfStatus.textContent = 'Thanks! We\'ve received your request and will get back to you shortly.';
 qfStatus.className = 'form-status success';
@@ -936,9 +937,10 @@ method:'POST',
 headers:{'Content-Type':'application/json'},
 body: JSON.stringify({ name, email, phone: phone || null, message: message || null })
 });
-const data = await res.json();
+let data = {};
+try{ data = await res.json(); }catch(_){ data = {}; }
 if(!res.ok){
-throw new Error(data.error || 'Something went wrong.');
+throw new Error(data.error || `Request failed (${res.status}). Make sure the backend server is running (npm start) and you're viewing this page at its address, e.g. http://localhost:3000`);
 }
 cfStatus.textContent = 'Message sent! We\'ll get back to you within a day.';
 cfStatus.className = 'form-status success';
