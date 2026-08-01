@@ -179,7 +179,7 @@ font-size:12px;cursor:pointer;
 const SUPABASE_URL = 'https://gjpwtgklpdeoiijelnrs.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_tjXofOu6uC1knv59KrNM0Q_dldRjaiX';
 
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 const loginScreen = document.getElementById('loginScreen');
 const dashboard = document.getElementById('dashboard');
@@ -209,7 +209,7 @@ loginSubmit.disabled = true;
 loginStatus.textContent = 'Signing in...';
 loginStatus.className = '';
 
-const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+const { data, error } = await sb.auth.signInWithPassword({ email, password });
 loginSubmit.disabled = false;
 if(error){
 loginStatus.textContent = error.message;
@@ -222,14 +222,14 @@ showDashboard(data.user);
 });
 
 document.getElementById('logoutBtn').addEventListener('click', async ()=>{
-await supabase.auth.signOut();
+await sb.auth.signOut();
 dashboard.style.display = 'none';
 loginScreen.style.display = 'flex';
 loginForm.reset();
 });
 
 async function checkSession(){
-const { data } = await supabase.auth.getSession();
+const { data } = await sb.auth.getSession();
 if(data.session && data.session.user){
 showDashboard(data.session.user);
 }
@@ -259,7 +259,7 @@ const body = document.getElementById('contactsBody');
 const empty = document.getElementById('contactsEmpty');
 body.innerHTML = '<tr><td colspan="6">Loading...</td></tr>';
 
-const { data, error } = await supabase
+const { data, error } = await sb
 .from('contacts')
 .select('*')
 .order('created_at', { ascending:false });
@@ -303,7 +303,7 @@ const body = document.getElementById('ordersBody');
 const empty = document.getElementById('ordersEmpty');
 body.innerHTML = '<tr><td colspan="6">Loading...</td></tr>';
 
-const { data, error } = await supabase
+const { data, error } = await sb
 .from('orders')
 .select('*')
 .order('created_at', { ascending:false });
@@ -350,7 +350,7 @@ document.querySelectorAll('.status-select').forEach(sel=>{
 sel.addEventListener('change', async ()=>{
 const id = sel.dataset.id;
 const table = sel.dataset.table;
-const { error } = await supabase.from(table).update({ status: sel.value }).eq('id', id);
+const { error } = await sb.from(table).update({ status: sel.value }).eq('id', id);
 if(error){
 alert('Could not update status: ' + error.message);
 return;
@@ -364,7 +364,7 @@ btn.addEventListener('click', async ()=>{
 if(!confirm('Delete this entry permanently?')) return;
 const id = btn.dataset.id;
 const table = btn.dataset.table;
-const { error } = await supabase.from(table).delete().eq('id', id);
+const { error } = await sb.from(table).delete().eq('id', id);
 if(error){
 alert('Could not delete: ' + error.message);
 return;
