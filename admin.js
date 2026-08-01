@@ -1,42 +1,62 @@
 const express = require('express');
-const session = require('express-session');
-const rateLimit = require('express-rate-limit');
+const basicAuth = require('express-basic-auth');
 const { pool } = require('./db');
 
 const router = express.Router();
 
-const ADMIN_USER = process.env.ADMIN_USER || 'admin';
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'change-me-now';
+// Logout must be registered BEFORE the basicAuth middleware below, so the
+// browser can reach it without needing to already be authenticated.
+//
+// HTTP Basic Auth has no real server-side session to end — the browser just
+// keeps re-sending the credentials it has cached. This route always replies
+// 401 with a fresh challenge, which makes most browsers drop the cached
+// credentials for this realm. It's the standard best-effort trick, not a
+// guarantee on every browser — closing the browser/tab (or clearing site
+// data) is the one fully reliable way to sign out.
+router.get('/logout', (req, res) => {
+  res
+    .set('WWW-Authenticate', 'Basic realm="RENI Tech Admin", charset="UTF-8"')
+    .status(401)
+    .set('Content-Type', 'text/html')
+    .send(`<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Signed out — RENI Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#201F1E;--surface:#2B2927;--line:#413E3A;--gold:#FFCB74;--gold-deep:#E3A947;--text:#F6F4F1;--muted:#B0A99E;--on-gold:#211C10;}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:36px;max-width:360px;text-align:center;}
+  .mark{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#FFDA9B,var(--gold-deep));display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:18px;color:var(--on-gold);margin:0 auto 18px;}
+  h1{font-family:'Space Grotesk',sans-serif;font-size:19px;margin-bottom:10px;}
+  p{color:var(--muted);font-size:14px;line-height:1.55;margin-bottom:22px;}
+  a{display:inline-block;background:linear-gradient(135deg,#FFDA9B,var(--gold));color:var(--on-gold);padding:11px 22px;border-radius:10px;font-weight:600;font-size:14px;text-decoration:none;}
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="mark">R</div>
+    <h1>Signed out</h1>
+    <p>You've been signed out of RENI Admin. If your browser still logs you back in automatically, close this tab (or the browser) to fully clear it.</p>
+    <a href="/admin">Back to sign in</a>
+  </div>
+</body>
+</html>`);
+});
 
-if (!process.env.SESSION_SECRET) {
-  console.warn(
-    'Warning: SESSION_SECRET is not set. Using an insecure default — set SESSION_SECRET in Render before going live.'
-  );
-}
-
+// Protect every remaining /admin route with a single username/password pair
+// set via environment variables in Render (see README). Never hardcode credentials.
 router.use(
-  session({
-    name: 'reni.admin.sid',
-    secret: process.env.SESSION_SECRET || 'dev-only-insecure-secret-change-me',
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      maxAge: 8 * 60 * 60 * 1000 // 8 hours
-    }
+  basicAuth({
+    users: { [process.env.ADMIN_USER || 'admin']: process.env.ADMIN_PASSWORD || 'change-me-now' },
+    challenge: true,
+    realm: 'RENI Tech Admin'
   })
 );
-
-// Slow down brute-force login attempts.
-const loginLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 10,
-  standardHeaders: true,
-  legacyHeaders: false,
-  message: { ok: false, errors: ['Too many attempts. Please wait a few minutes and try again.'] }
-});
 
 function escapeHtml(str) {
   return String(str ?? '').replace(/[&<>"']/g, (c) => (
@@ -58,132 +78,7 @@ function initials(name) {
   return escapeHtml(chars.toUpperCase() || '?');
 }
 
-function requireAuth(req, res, next) {
-  if (req.session && req.session.isAdmin) return next();
-  const next_ = encodeURIComponent(req.originalUrl || '/admin');
-  return res.redirect(`/admin/login?next=${next_}`);
-}
-
-/* ---------------- Shared page chrome tokens (kept identical across pages) ---------------- */
-const HEAD = `
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<style>
-:root{
-  --bg:#201F1E; --bg-deep:#181717; --surface:#2B2927; --surface-2:#353330;
-  --line:#413E3A; --line-soft:#333130; --gold:#FFCB74; --gold-deep:#E3A947;
-  --text:#F6F4F1; --muted:#B0A99E; --muted-2:#7C766D; --on-gold:#211C10;
-  --contact:#D9D3C4; --quote:#FFCB74; --bad:#E68D82;
-  --display:'Space Grotesk',sans-serif; --body:'Inter',sans-serif; --mono:'JetBrains Mono',monospace;
-}
-*{margin:0;padding:0;box-sizing:border-box;}
-a{color:var(--gold);}
-::selection{background:var(--gold);color:var(--on-gold);}
-`;
-
-/* ---------------- Login page ---------------- */
-router.get('/login', (req, res) => {
-  if (req.session && req.session.isAdmin) return res.redirect('/admin');
-
-  const error = req.query.error === '1';
-  const loggedOut = req.query.loggedout === '1';
-  const next_ = escapeHtml(req.query.next || '');
-
-  res.set('Content-Type', 'text/html').send(`<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sign In — RENI Admin</title>
-${HEAD}
-<style>
-body{
-  background:
-    radial-gradient(700px 420px at 18% 12%, rgba(255,203,116,0.09), transparent 60%),
-    radial-gradient(600px 400px at 85% 90%, rgba(255,203,116,0.05), transparent 60%),
-    var(--bg);
-  color:var(--text);font-family:var(--body);min-height:100vh;
-  display:flex;align-items:center;justify-content:center;padding:24px;-webkit-font-smoothing:antialiased;
-}
-.login-card{
-  background:var(--surface);border:1px solid var(--line);border-radius:20px;
-  padding:44px 40px;width:100%;max-width:400px;box-shadow:0 30px 70px rgba(0,0,0,0.45);
-}
-.login-mark{display:flex;align-items:center;gap:10px;margin-bottom:28px;}
-.login-mark .dot{width:9px;height:9px;border-radius:50%;background:var(--gold);box-shadow:0 0 0 4px rgba(255,203,116,0.15);}
-.login-mark span{font-family:var(--mono);font-size:11px;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);}
-h1{font-family:var(--display);font-weight:700;font-size:26px;letter-spacing:-0.5px;margin-bottom:8px;}
-p.muted{color:var(--muted);font-size:14px;margin-bottom:26px;line-height:1.5;}
-.field{margin-bottom:18px;}
-.field label{display:block;font-size:11.5px;color:var(--muted-2);margin-bottom:7px;font-family:var(--mono);letter-spacing:1.2px;text-transform:uppercase;}
-.field input{
-  width:100%;padding:13px 14px;border-radius:10px;border:1px solid var(--line);
-  background:var(--bg-deep);color:var(--text);font-size:14.5px;transition:border-color .2s ease;
-}
-.field input:focus{border-color:var(--gold);outline:none;}
-.field input::placeholder{color:var(--muted-2);}
-.btn{
-  width:100%;padding:14px;border-radius:10px;border:none;font-weight:600;font-size:15px;
-  background:linear-gradient(135deg,#FFDA9B,var(--gold));color:var(--on-gold);cursor:pointer;
-  transition:transform .2s ease, box-shadow .2s ease;
-}
-.btn:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(255,203,116,0.28);}
-.msg{margin-top:16px;font-size:13.5px;display:flex;align-items:center;gap:7px;}
-.msg::before{content:'';width:6px;height:6px;border-radius:50%;flex-shrink:0;}
-.msg.error{color:var(--bad);}
-.msg.error::before{background:var(--bad);}
-.msg.success{color:#8FC896;}
-.msg.success::before{background:#8FC896;}
-</style>
-</head>
-<body>
-  <div class="login-card">
-    <div class="login-mark"><span class="dot"></span><span>Admin Access</span></div>
-    <h1>Sign in to RENI</h1>
-    <p class="muted">Manage incoming messages and quote requests from one place.</p>
-    <form method="post" action="/admin/login">
-      ${next_ ? `<input type="hidden" name="next" value="${next_}">` : ''}
-      <div class="field">
-        <label for="username">Username</label>
-        <input type="text" id="username" name="username" required autocomplete="username" autofocus>
-      </div>
-      <div class="field">
-        <label for="password">Password</label>
-        <input type="password" id="password" name="password" required autocomplete="current-password">
-      </div>
-      <button type="submit" class="btn">Sign In</button>
-      ${error ? `<p class="msg error">Incorrect username or password.</p>` : ''}
-      ${loggedOut ? `<p class="msg success">You've been signed out.</p>` : ''}
-    </form>
-  </div>
-</body>
-</html>`);
-});
-
-router.post('/login', loginLimiter, express.urlencoded({ extended: true }), (req, res) => {
-  const { username, password, next: nextUrl } = req.body || {};
-
-  if (username === ADMIN_USER && password === ADMIN_PASSWORD) {
-    req.session.isAdmin = true;
-    const dest = nextUrl && nextUrl.startsWith('/admin') ? nextUrl : '/admin';
-    return req.session.save(() => res.redirect(dest));
-  }
-
-  return res.redirect('/admin/login?error=1');
-});
-
-router.get('/logout', (req, res) => {
-  if (req.session) {
-    return req.session.destroy(() => {
-      res.clearCookie('reni.admin.sid');
-      res.redirect('/admin/login?loggedout=1');
-    });
-  }
-  res.redirect('/admin/login?loggedout=1');
-});
-
-/* ---------------- Dashboard (protected) ---------------- */
-router.get('/', requireAuth, async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const typeFilter = ['contact', 'quote'].includes(req.query.type) ? req.query.type : null;
     const q = (req.query.q || '').trim();
@@ -208,6 +103,7 @@ router.get('/', requireAuth, async (req, res) => {
       params
     );
 
+    // Totals for the stat cards always reflect everything, not the current filter.
     const { rows: totals } = await pool.query(
       `SELECT type, COUNT(*)::int AS count FROM submissions GROUP BY type`
     );
@@ -259,12 +155,23 @@ router.get('/', requireAuth, async (req, res) => {
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>RENI Tech Services — Admin</title>
-${HEAD}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
+:root{
+  --bg:#201F1E; --bg-deep:#181717; --surface:#2B2927; --surface-2:#353330;
+  --line:#413E3A; --line-soft:#333130; --gold:#FFCB74; --gold-deep:#E3A947;
+  --text:#F6F4F1; --muted:#B0A99E; --muted-2:#7C766D; --on-gold:#211C10;
+  --contact:#D9D3C4; --quote:#FFCB74;
+  --display:'Space Grotesk',sans-serif; --body:'Inter',sans-serif; --mono:'JetBrains Mono',monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
 body{
   background:radial-gradient(900px 500px at 100% -10%, rgba(255,203,116,0.06), transparent 60%), var(--bg);
   color:var(--text);font-family:var(--body);min-height:100vh;padding:36px 40px 70px;-webkit-font-smoothing:antialiased;
 }
+a{color:var(--gold);}
+::selection{background:var(--gold);color:var(--on-gold);}
 .wrap{max-width:1280px;margin:0 auto;}
 
 .topbar{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;margin-bottom:28px;flex-wrap:wrap;}
@@ -277,7 +184,7 @@ body{
 .live-dot{width:6px;height:6px;border-radius:50%;background:#8FC896;box-shadow:0 0 0 3px rgba(143,200,150,0.15);animation:pulse 2s infinite;}
 @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.4;}}
 .logout-btn{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:500;color:var(--muted);background:var(--surface);border:1px solid var(--line);padding:9px 15px;border-radius:100px;text-decoration:none;transition:all .18s ease;}
-.logout-btn:hover{border-color:var(--bad);color:var(--bad);}
+.logout-btn:hover{border-color:#E68D82;color:#E68D82;}
 
 .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:26px;}
 @media (max-width:900px){.stats-row{grid-template-columns:repeat(2,1fr);}}
@@ -399,7 +306,7 @@ tr:last-child td{border-bottom:none;}
 });
 
 // Plain JSON, handy if you ever want to pull this into a spreadsheet or script.
-router.get('/data.json', requireAuth, async (req, res) => {
+router.get('/data.json', async (req, res) => {
   try {
     const typeFilter = ['contact', 'quote'].includes(req.query.type) ? req.query.type : null;
     const { rows } = await pool.query(
