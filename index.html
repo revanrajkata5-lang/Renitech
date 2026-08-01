@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RENI Tech Services — IT Solutions &amp; Digital Marketing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<style>
+:root{
+  --bg:#2F2F2F;
+  --bg-deep:#252423;
+  --surface:#3A3836;
+  --surface-2:#454340;
+  --line:#524F49;
+  --teal:#FFCB74;
+  --violet:#D9D3C4;
+  --gold:#E3A947;
+  --text:#F6F6F6;
+  --muted:#B7B2A8;
+  --muted-2:#85807A;
+  --highlight:#FFCB74;
+  --on-gold:#232120;
+  --radius:14px;
+  --display:'Space Grotesk',sans-serif;
+  --body:'Inter',sans-serif;
+  --mono:'JetBrains Mono',monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+::-webkit-scrollbar{width:11px;}
+::-webkit-scrollbar-track{background:var(--bg-deep);}
+::-webkit-scrollbar-thumb{background:var(--line);border-radius:20px;border:2px solid var(--bg-deep);}
+::-webkit-scrollbar-thumb:hover{background:var(--teal);}
+body{
+  background:
+    radial-gradient(1200px 700px at 12% -8%, rgba(255,203,116,0.07), transparent 60%),
+    radial-gradient(1000px 600px at 100% 10%, rgba(255,203,116,0.05), transparent 55%),
+    var(--bg);
+  color:var(--text);
+  font-family:var(--body);
+  overflow-x:hidden;
+  line-height:1.6;
+}
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important; scroll-behavior:auto !important;}
+}
+a{color:inherit;text-decoration:none;}
+img{max-width:100%;display:block;}
+.wrap{max-width:1240px;margin:0 auto;padding:0 32px;perspective:1600px;}
+@media (max-width:768px){.wrap{padding:0 20px;}}
+
+::selection{background:var(--teal);color:var(--on-gold);}
+:focus-visible{outline:2px solid var(--teal);outline-offset:3px;}
+
+/* ---------- NAV ---------- */
+header{
+  position:fixed;top:0;left:0;right:0;z-index:1000;
+  padding:22px 0;
+  transition:background .4s ease, padding .4s ease, border-color .4s ease;
+  border-bottom:1px solid transparent;
+}
+header.scrolled{
+  background:rgba(37,36,35,0.86);
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+  padding:14px 0;
+  border-bottom:1px solid var(--line);
+}
+nav{display:flex;align-items:center;justify-content:space-between;}
+
+/* ---------- LOGO LOCKUP (transparent mark + text wordmark) ---------- */
+.logo-brand{
+  display:inline-flex;align-items:center;gap:13px;
+  transition:transform .3s ease, opacity .3s ease;
+}
+.logo-brand:hover{transform:translateY(-2px);opacity:0.92;}
+.logo-img{
+  display:block;height:46px;width:auto;
+  filter:drop-shadow(0 3px 10px rgba(0,0,0,0.45));
+  transition:height .3s ease;
+}
+.logo-text{
+  display:flex;flex-direction:column;line-height:1.05;
+}
+.logo-text .logo-name{
+  font-family:var(--display);font-weight:700;font-size:19px;letter-spacing:0.5px;
+  color:var(--text);
+  background:linear-gradient(135deg,#FFE3B0,var(--teal) 55%,#C98A2E);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+}
+.logo-text .logo-sub{
+  font-family:var(--mono);font-weight:500;font-size:8.5px;letter-spacing:1.8px;
+  color:var(--muted);text-transform:uppercase;margin-top:3px;
+}
+header.scrolled .logo-img{height:36px;}
+.logo-brand-footer .logo-img{height:60px;}
+.logo-brand-footer .logo-text .logo-name{font-size:24px;}
+.logo-brand-footer .logo-text .logo-sub{font-size:10px;}
+@media (max-width:768px){
+  .logo-img{height:36px;}
+  .logo-text .logo-name{font-size:16px;}
+  .logo-text .logo-sub{display:none;}
+  .logo-brand-footer .logo-img{height:50px;}
+  .logo-brand-footer .logo-text .logo-name{font-size:20px;}
+  .logo-brand-footer .logo-text .logo-sub{display:block;font-size:9px;}
+}
+
+.nav-links{display:flex;gap:36px;align-items:center;}
+.nav-links a{
+  font-size:14.5px;color:var(--muted);position:relative;padding:4px 0;
+  transition:color .25s ease;
+}
+.nav-links a:hover{color:var(--text);}
+.nav-links a::after{
+  content:'';position:absolute;bottom:0;left:0;width:0;height:1px;
+  background:var(--teal);transition:width .3s ease;
+}
+.nav-links a:hover::after{width:100%;}
+.nav-cta{
+  background:linear-gradient(135deg,#FFDA9B,var(--teal));color:var(--on-gold);padding:11px 22px;border-radius:100px;
+  font-weight:600;font-size:14px;transition:transform .25s ease, box-shadow .25s ease;
+}
+.nav-cta:hover{transform:translateY(-2px);box-shadow:0 8px 26px rgba(255,203,116,0.3);}
+.nav-toggle{display:none;background:none;border:none;color:var(--text);font-size:26px;cursor:pointer;}
+@media (max-width:900px){
+  .nav-links{
+    position:fixed;top:0;right:-100%;width:78%;max-width:340px;height:100vh;
+    background:var(--surface);flex-direction:column;justify-content:center;
+    gap:28px;transition:right .4s ease;padding:40px;
+  }
+  .nav-links.open{right:0;box-shadow:-20px 0 60px rgba(0,0,0,0.45);}
+  .nav-toggle{display:block;}
+  .nav-cta{display:none;}
+}
+
+/* ---------- HERO ---------- */
+.hero{
+  min-height:100vh;position:relative;display:flex;align-items:center;
+  padding-top:120px;padding-bottom:60px;overflow:hidden;
+}
+#hero-canvas{position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:-1;opacity:0;transition:opacity 1.5s ease;pointer-events:none;}
+.hero-content{position:relative;z-index:2;width:100%;}
+.eyebrow{
+  font-family:var(--mono);font-size:12px;letter-spacing:3px;text-transform:uppercase;
+  color:var(--highlight);display:flex;align-items:center;gap:10px;margin-bottom:24px;
+  opacity:0;
+}
+.eyebrow::before{content:'';width:28px;height:1px;background:var(--highlight);}
+.hero h1{
+  font-family:var(--display);font-weight:700;
+  font-size:clamp(38px,6.2vw,84px);line-height:1.02;letter-spacing:-1.5px;
+  max-width:16ch;
+}
+.hero h1 .line{overflow:hidden;display:block;}
+.hero h1 .line span{display:inline-block;transform:translateY(110%);}
+.hero h1 .accent{color:var(--highlight);font-style:normal;}
+.hero-sub{
+  margin-top:28px;font-size:19px;color:var(--muted);max-width:46ch;
+  opacity:0;transform:translateY(20px);
+}
+.hero-btns{display:flex;gap:16px;margin-top:40px;flex-wrap:wrap;opacity:0;transform:translateY(20px);}
+.btn{
+  padding:16px 30px;border-radius:100px;font-weight:600;font-size:15px;
+  display:inline-flex;align-items:center;gap:10px;transition:transform .25s ease, box-shadow .25s ease, background .25s ease;
+  cursor:pointer;border:none;font-family:var(--body);
+}
+.btn-primary{background:linear-gradient(135deg,#FFDA9B,var(--teal));color:var(--on-gold);box-shadow:0 4px 16px rgba(255,203,116,0.15);}
+.btn-primary:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(255,203,116,0.35);}
+.btn-secondary{background:rgba(255,255,255,0.02);color:var(--text);border:1px solid var(--line);}
+.btn-secondary:hover{border-color:var(--teal);background:rgba(255,203,116,0.1);transform:translateY(-3px);}
+
+.scroll-cue{
+  position:absolute;bottom:36px;left:32px;display:flex;align-items:center;gap:12px;
+  font-family:var(--mono);font-size:11px;letter-spacing:1.5px;color:var(--muted-2);
+  z-index:2;opacity:0;
+}
+.scroll-cue .dot{width:6px;height:6px;border-radius:50%;background:var(--teal);animation:pulse 1.8s infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.4;transform:scale(1.4);}}
+
+/* ---------- TRUST BAR ---------- */
+.trust-bar{
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+  padding:40px 0;
+}
+.trust-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;text-align:center;}
+@media (max-width:768px){.trust-grid{grid-template-columns:repeat(2,1fr);gap:32px;}}
+.trust-num{
+  font-family:var(--mono);font-size:clamp(28px,4vw,42px);font-weight:500;color:var(--highlight);
+}
+.trust-label{font-size:13px;color:var(--muted);margin-top:6px;letter-spacing:.3px;}
+
+/* ---------- SECTION HEADERS ---------- */
+.section{padding:120px 0;}
+@media (max-width:768px){.section{padding:80px 0;}}
+.section-head{max-width:640px;margin-bottom:64px;}
+.section-eyebrow{
+  font-family:var(--mono);font-size:12px;letter-spacing:3px;text-transform:uppercase;
+  color:var(--violet);margin-bottom:16px;
+}
+.section-head h2{
+  font-family:var(--display);font-weight:600;font-size:clamp(30px,4vw,48px);
+  letter-spacing:-1px;line-height:1.1;
+}
+.section-head p{margin-top:18px;color:var(--muted);font-size:17px;max-width:52ch;}
+.reveal{opacity:0;transform:translateY(36px);}
+
+/* ---------- 3D DIRECTIONAL REVEALS ---------- */
+.reveal-l,.reveal-r{opacity:0;will-change:transform,opacity;transform-style:preserve-3d;}
+.reveal-l{transform:translateX(-90px) translateZ(-60px) rotateY(28deg);}
+.reveal-r{transform:translateX(90px) translateZ(-60px) rotateY(-28deg);}
+
+/* ---------- 3D HOVER TILT (mouse-tracked) ---------- */
+.tilt-3d{transform-style:preserve-3d;transition:transform .15s ease-out, box-shadow .3s ease;will-change:transform;}
+.tilt-3d .service-icon,.tilt-3d h5,.tilt-3d h3,.tilt-3d h4,.tilt-3d .country-flag{transform:translateZ(28px);}
+.tilt-3d p,.tilt-3d span,.tilt-3d .pillar-list,.tilt-3d .pillar-arrow{transform:translateZ(16px);}
+
+/* ---------- PILLAR SPLIT ---------- */
+.pillars{display:grid;grid-template-columns:1fr 1fr;gap:2px;border-radius:20px;overflow:hidden;border:1px solid var(--line);}
+@media (max-width:860px){.pillars{grid-template-columns:1fr;}}
+.pillar{
+  padding:56px 44px;position:relative;background:var(--surface);
+  transition:background .4s ease;overflow:hidden;
+}
+.pillar::before{
+  content:'';position:absolute;inset:0;opacity:0;transition:opacity .5s ease;
+}
+.pillar.marketing::before{background:radial-gradient(circle at 30% 20%, rgba(184,134,11,0.15), transparent 60%);}
+.pillar.it::before{background:radial-gradient(circle at 70% 20%, rgba(184,134,11,0.18), transparent 60%);}
+.pillar:hover::before{opacity:1;}
+.pillar-tag{font-family:var(--mono);font-size:12px;letter-spacing:2px;text-transform:uppercase;position:relative;z-index:1;}
+.pillar.marketing .pillar-tag{color:var(--gold);}
+.pillar.it .pillar-tag{color:var(--violet);}
+.pillar h3{font-family:var(--display);font-size:32px;font-weight:600;margin-top:16px;position:relative;z-index:1;}
+.pillar-list{margin-top:28px;position:relative;z-index:1;}
+.pillar-list li{list-style:none;padding:12px 0;border-top:1px solid var(--line);color:var(--muted);font-size:15px;display:flex;justify-content:space-between;align-items:center;}
+.pillar-list li:hover{color:var(--text);}
+.pillar-arrow{position:relative;z-index:1;margin-top:32px;display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:14.5px;}
+.pillar.marketing .pillar-arrow{color:var(--gold);}
+.pillar.it .pillar-arrow{color:var(--violet);}
+.pillar-arrow svg{transition:transform .3s ease;}
+.pillar:hover .pillar-arrow svg{transform:translateX(6px);}
+
+/* ---------- HOW IT WORKS ---------- */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;}
+@media (max-width:860px){.steps{grid-template-columns:1fr;}}
+.step{padding:36px 0;border-top:1px solid var(--line);position:relative;}
+.step-num{font-family:var(--mono);font-size:13px;color:var(--teal);margin-bottom:20px;}
+.step h4{font-family:var(--display);font-size:22px;font-weight:600;margin-bottom:12px;}
+.step p{color:var(--muted);font-size:15px;}
+
+/* ---------- SERVICES GRID ---------- */
+.services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:16px;overflow:hidden;}
+@media (max-width:860px){.services-grid{grid-template-columns:repeat(2,1fr);}}
+@media (max-width:560px){.services-grid{grid-template-columns:1fr;}}
+.service-card{
+  background:var(--surface);padding:34px 28px;transition:background .3s ease, transform .3s ease, box-shadow .3s ease;
+  cursor:default;position:relative;
+}
+.service-card:hover{background:var(--surface-2);transform:translateY(-4px);box-shadow:0 14px 30px rgba(0,0,0,0.35), inset 0 0 0 1px rgba(255,203,116,0.18);}
+.service-icon{
+  width:42px;height:42px;border-radius:10px;background:rgba(255,203,116,0.14);
+  display:flex;align-items:center;justify-content:center;margin-bottom:20px;color:var(--teal);
+  box-shadow:inset 0 0 0 1px rgba(255,203,116,0.25);
+}
+.service-card h5{font-family:var(--display);font-size:17px;font-weight:600;margin-bottom:8px;}
+.service-card p{color:var(--muted);font-size:14px;}
+
+/* ---------- QUOTE CALCULATOR ---------- */
+.calc{
+  background:var(--surface);border:1px solid var(--line);border-radius:20px;
+  padding:48px;display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start;
+  box-shadow:0 24px 48px rgba(0,0,0,0.3);
+}
+@media (max-width:860px){.calc{grid-template-columns:1fr;padding:32px 24px;gap:32px;}}
+.calc h3{font-family:var(--display);font-size:24px;margin-bottom:8px;}
+.calc-sub{color:var(--muted);font-size:14.5px;margin-bottom:28px;}
+.calc-opt{
+  display:flex;align-items:center;justify-content:space-between;padding:16px 18px;
+  border:1px solid var(--line);border-radius:12px;margin-bottom:12px;cursor:pointer;
+  transition:border-color .25s ease, background .25s ease;
+}
+.calc-opt:hover{border-color:var(--muted-2);}
+.calc-opt.active{border-color:var(--teal);background:rgba(255,203,116,0.12);box-shadow:0 0 0 1px rgba(255,203,116,0.2);}
+.calc-opt-label{display:flex;align-items:center;gap:14px;font-size:15px;}
+.checkbox{width:20px;height:20px;border-radius:6px;border:1.5px solid var(--muted-2);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .2s ease;}
+.calc-opt.active .checkbox{background:var(--teal);border-color:var(--teal);}
+.calc-opt-price{font-family:var(--mono);font-size:13px;color:var(--muted);}
+.calc-result{
+  background:var(--surface-2);border-radius:16px;padding:32px;text-align:center;
+  display:flex;flex-direction:column;justify-content:center;height:100%;
+}
+.calc-result-label{font-family:var(--mono);font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);}
+.calc-result-num{font-family:var(--mono);font-weight:500;font-size:clamp(32px,4vw,46px);color:var(--highlight);margin:16px 0;transition:all .3s ease;}
+.calc-result-note{font-size:13px;color:var(--muted-2);margin-bottom:24px;}
+
+/* ---------- COUNTRIES ---------- */
+.countries{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;}
+@media (max-width:768px){.countries{grid-template-columns:repeat(2,1fr);}}
+.country-card{
+  border:1px solid var(--line);border-radius:16px;padding:28px 24px;position:relative;overflow:hidden;
+  transition:border-color .3s ease, transform .3s ease;
+}
+.country-card:hover{border-color:var(--teal);transform:translateY(-4px);box-shadow:0 14px 30px rgba(0,0,0,0.35), 0 0 24px rgba(255,203,116,0.12);}
+.country-flag{font-size:28px;margin-bottom:14px;}
+.country-card h5{font-family:var(--display);font-size:18px;font-weight:600;}
+.country-card span{font-size:13px;color:var(--muted);}
+
+/* ---------- PROOF ---------- */
+.proof{
+  background:linear-gradient(135deg, rgba(255,203,116,0.09), rgba(255,203,116,0.03));
+  border:1px solid var(--line);border-radius:24px;padding:64px;
+  box-shadow:0 30px 60px rgba(0,0,0,0.3);
+}
+@media (max-width:768px){.proof{padding:36px 24px;}}
+.proof-quote{font-family:var(--display);font-size:clamp(22px,3vw,32px);font-weight:500;line-height:1.4;max-width:20ch;}
+.proof-stats{display:flex;gap:48px;margin-top:40px;flex-wrap:wrap;}
+.proof-stat-num{font-family:var(--mono);font-size:32px;color:var(--highlight);}
+.proof-stat-label{font-size:13px;color:var(--muted);margin-top:4px;}
+.proof-attr{margin-top:36px;font-size:14.5px;color:var(--muted);}
+.proof-attr b{color:var(--text);}
+
+/* ---------- FINAL CTA ---------- */
+.final-cta{text-align:center;}
+.final-cta h2{font-family:var(--display);font-size:clamp(32px,5vw,56px);font-weight:600;letter-spacing:-1px;max-width:16ch;margin:0 auto;}
+.final-cta p{color:var(--muted);margin-top:20px;font-size:17px;}
+.final-btns{display:flex;gap:16px;justify-content:center;margin-top:36px;flex-wrap:wrap;}
+
+/* ---------- FOOTER ---------- */
+footer{border-top:1px solid var(--line);padding:56px 0 32px;}
+.footer-top{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:32px;margin-bottom:40px;}
+.footer-links{display:flex;gap:56px;flex-wrap:wrap;}
+.footer-col h6{font-family:var(--mono);font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--muted-2);margin-bottom:16px;}
+.footer-col a{display:block;font-size:14px;color:var(--muted);padding:6px 0;transition:color .2s ease;}
+.footer-col a:hover{color:var(--teal);}
+.footer-bottom{border-top:1px solid var(--line);padding-top:24px;display:flex;justify-content:space-between;color:var(--muted-2);font-size:13px;flex-wrap:wrap;gap:12px;}
+
+/* ---------- WHATSAPP + DARK TOGGLE ---------- */
+.whatsapp-fab{
+  position:fixed;bottom:28px;right:28px;z-index:900;
+  width:58px;height:58px;border-radius:50%;background:#25D366;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 8px 24px rgba(37,211,102,0.4);cursor:pointer;
+  transition:transform .25s ease;
+}
+.whatsapp-fab:hover{transform:scale(1.08);}
+.whatsapp-fab::before{
+  content:'';position:absolute;inset:0;border-radius:50%;background:#25D366;
+  animation:ripple 2.2s infinite;z-index:-1;
+}
+@keyframes ripple{0%{transform:scale(1);opacity:.6;}100%{transform:scale(1.9);opacity:0;}}
+
+/* skeleton loader demo */
+.skeleton{background:linear-gradient(90deg, var(--surface) 25%, var(--surface-2) 50%, var(--surface) 75%);background-size:200% 100%;animation:shimmer 1.6s infinite;border-radius:8px;}
+@keyframes shimmer{0%{background-position:200% 0;}100%{background-position:-200% 0;}}
+</style>
+</head>
+<body>
+
+<canvas id="hero-canvas" aria-hidden="true"></canvas>
+
+<header id="siteHeader">
+  <div class="wrap">
+    <nav>
+     <a href="#top" class="logo logo-brand">
+    <img src="assets/logo-mark.png" alt="RENI Tech Services logo" class="logo-img">
+    <span class="logo-text"><span class="logo-name">RENI</span><span class="logo-sub">Tech Services</span></span>
+</a>
+      <div class="nav-links" id="navLinks">
+        <a href="#pillars">Services</a>
+        <a href="#how">Process</a>
+        <a href="#calculator">Estimate</a>
+        <a href="#why">Why RENI</a>
+        <a href="#contact" class="nav-cta">Start a Project</a>
+      </div>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">☰</button>
+    </nav>
+  </div>
+</header>
+
+<section class="hero" id="top">
+  <div class="wrap hero-content">
+    <p class="eyebrow" id="heroEyebrow">Innovation driven by passion &amp; trust</p>
+    <h1 id="heroHeading">
+      <span class="line"><span>Software built with</span></span>
+      <span class="line"><span><em class="accent">passion.</em> Marketing</span></span>
+      <span class="line"><span>built on trust.</span></span>
+    </h1>
+    <p class="hero-sub" id="heroSub">A dynamic, student-founded tech startup driven by raw passion, deep technical knowledge, and relentless ambition — bridging fresh innovation with battle-tested execution across software, IT infrastructure, and data-driven digital marketing.</p>
+    <div class="hero-btns" id="heroBtns">
+      <a href="#pillars" class="btn btn-primary">Explore Marketing</a>
+      <a href="#pillars" class="btn btn-secondary">Explore IT Solutions</a>
+    </div>
+  </div>
+  <div class="scroll-cue" id="scrollCue"><span class="dot" style="background-color: #FFCB74;"></span> SCROLL TO EXPLORE</div>
+</section>
+
+<div class="trust-bar">
+  <div class="wrap trust-grid">
+    <div><div class="trust-num" data-count="8">0</div><div class="trust-label">Core services offered</div></div>
+    <div><div class="trust-num" data-count="2">0</div><div class="trust-label">Disciplines, one team</div></div>
+    <div><div class="trust-num" data-count="100" data-suffix="%">0%</div><div class="trust-label">Direct client focus</div></div>
+    <div><div class="trust-num" data-count="3">0</div><div class="trust-label">Guiding pillars</div></div>
+  </div>
+</div>
+
+<section class="section" id="pillars">
+  <div class="wrap">
+    <div class="section-head reveal-l">
+      <p class="section-eyebrow">Where do you start?</p>
+      <h2>Two paths. One partner.</h2>
+      <p>Whether you need people finding and trusting your brand, or software that actually runs the way your business works, pick your lane below — everything else on this site follows from here.</p>
+    </div>
+    <div class="pillars">
+      <div class="pillar marketing reveal-l tilt-3d">
+        <p class="pillar-tag">Get Found</p>
+        <h3>Digital Marketing &amp; Brand Growth</h3>
+        <ul class="pillar-list">
+          <li>Social Media Strategy &amp; Community Management <span>→</span></li>
+          <li>SEO &amp; Online Visibility <span>→</span></li>
+          <li>Targeted Digital Campaign Planning &amp; Analytics <span>→</span></li>
+          <li>Visual Branding &amp; Content Creation <span>→</span></li>
+        </ul>
+        <a href="#calculator" class="pillar-arrow">Explore Marketing <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </div>
+      <div class="pillar it reveal-r tilt-3d">
+        <p class="pillar-tag">Get Built</p>
+        <h3>IT &amp; Software Solutions</h3>
+        <ul class="pillar-list">
+          <li>Custom Web &amp; Desktop App Development <span>→</span></li>
+          <li>Full-Stack Development, Maintenance &amp; Optimization <span>→</span></li>
+          <li>API Integration &amp; Process Automation <span>→</span></li>
+          <li>IT Infrastructure Planning &amp; Consulting <span>→</span></li>
+        </ul>
+        <a href="#calculator" class="pillar-arrow">Explore IT Solutions <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="how">
+  <div class="wrap">
+    <div class="section-head reveal-r">
+      <p class="section-eyebrow">The process</p>
+      <h2>From first call to going live.</h2>
+    </div>
+    <div class="steps">
+      <div class="step reveal-l tilt-3d">
+        <p class="step-num">01 / Consult</p>
+        <h4>Customer trust first</h4>
+        <p>A short call to understand your business and your goals — every project starts with absolute transparency about scope, timeline and cost, no generic package pitched blind.</p>
+      </div>
+      <div class="step reveal-r tilt-3d">
+        <p class="step-num">02 / Build &amp; Launch</p>
+        <h4>We execute in the open</h4>
+        <p>Real progress, real check-ins, no black box. Our team's deep technical skill and creative strategy stays ahead of the trend, not behind it.</p>
+      </div>
+      <div class="step reveal-l tilt-3d">
+        <p class="step-num">03 / Grow</p>
+        <h4>Belief in the outcome</h4>
+        <p>Great results are never a solo effort. Our diverse talents merge to keep tracking what matters, and to keep delivering real, measurable value.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="services">
+  <div class="wrap">
+    <div class="section-head reveal-l">
+      <p class="section-eyebrow">Full service list</p>
+      <h2>Everything under one roof.</h2>
+    </div>
+    <div class="services-grid reveal">
+      <div class="service-card reveal-l tilt-3d">
+        <div class="service-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg></div>
+        <h5>Custom Web &amp; Desktop Apps</h5><p>Applications built around a real user flow, from browser to desktop.</p>
+      </div>
+      <div class="service-card reveal-r tilt-3d">
+        <div class="service-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 7h-9M14 17H5M17 4v6M8 14v6"/></svg></div>
+        <h5>Full-Stack Development</h5><p>Web development, maintenance &amp; optimization built for the long run.</p>
+      </div>
+      <div class="service-card reveal-l tilt-3d">
+        <div class="service-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.5 12a5.5 5.5 0 11-11 0 5.5 5.5 0 0111 0z"/><path d="M8 12h9M12.5 7.5v9"/></svg></div>
+        <h5>API Integration &amp; Automation</h5><p>Backend logic and process automation that removes manual work.</p>
+      </div>
+      <div class="service-card reveal-r tilt-3d">
+        <div class="service-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06A1.65 1.65 0 004.6 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06A1.65 1.65 0 009 4.6a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></div>
+        <h5>IT Infrastructure &amp; Consulting</h5><p>Technology planning built for where your business is heading.</p>
+      </div>
+      <div class="service-card reveal-l tilt-3d">
+        <div class="service-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.13.96.36 1.9.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0122 16.92z"/></svg></div>
+        <h5>Social Media &amp; Community</h5><p>Data-driven strategy and community management that builds trust.</p>
+      </div>
+      <div class="service-card reveal-r tilt-3d">
+        <div class="service-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 21l-4.35-4.35"/><circle cx="10" cy="10" r="7"/></svg></div>
+        <h5>SEO &amp; Online Visibility</h5><p>Rank for the searches that actually turn into customers.</p>
+      </div>
+      <div class="service-card reveal-l tilt-3d">
+        <div class="service-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12a10 10 0 11-20 0 10 10 0 0120 0z"/><path d="M2 12h20M12 2a15 15 0 010 20 15 15 0 010-20z"/></svg></div>
+        <h5>Targeted Campaign Planning</h5><p>Digital campaigns planned and analyzed against real outcomes.</p>
+      </div>
+      <div class="service-card reveal-r tilt-3d">
+        <div class="service-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg></div>
+        <h5>Visual Branding &amp; Content</h5><p>Graphics and content creation strategy that gives your brand a face.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="calculator">
+  <div class="wrap">
+    <div class="section-head reveal-r">
+      <p class="section-eyebrow">No "contact us for pricing"</p>
+      <h2>Get an instant estimate.</h2>
+      <p>Pick what you need. See a real range immediately — no form, no wait.</p>
+    </div>
+    <div class="calc">
+      <div class="reveal-l">
+        <h3>Build your package</h3>
+        <p class="calc-sub">Select any combination below</p>
+        <div id="calcOptions">
+          <div class="calc-opt" data-price="350" data-name="Website / Desktop App">
+            <div class="calc-opt-label"><span class="checkbox"></span> Custom Web &amp; Desktop App</div>
+            <span class="calc-opt-price">from $350</span>
+          </div>
+          <div class="calc-opt" data-price="250" data-name="SEO">
+            <div class="calc-opt-label"><span class="checkbox"></span> SEO &amp; Online Visibility</div>
+            <span class="calc-opt-price">from $250/mo</span>
+          </div>
+          <div class="calc-opt" data-price="280" data-name="Social & Campaigns">
+            <div class="calc-opt-label"><span class="checkbox"></span> Social Media &amp; Campaign Management</div>
+            <span class="calc-opt-price">from $280/mo</span>
+          </div>
+          <div class="calc-opt" data-price="450" data-name="API / Automation">
+            <div class="calc-opt-label"><span class="checkbox"></span> API Integration &amp; Automation</div>
+            <span class="calc-opt-price">from $450</span>
+          </div>
+          <div class="calc-opt" data-price="500" data-name="Custom Software">
+            <div class="calc-opt-label"><span class="checkbox"></span> Full-Stack / Custom Software</div>
+            <span class="calc-opt-price">from $500</span>
+          </div>
+          <div class="calc-opt" data-price="300" data-name="Branding">
+            <div class="calc-opt-label"><span class="checkbox"></span> Visual Branding &amp; Content</div>
+            <span class="calc-opt-price">from $300</span>
+          </div>
+        </div>
+      </div>
+      <div class="calc-result reveal-r tilt-3d">
+        <p class="calc-result-label">Estimated Range</p>
+        <div class="calc-result-num" id="calcResult">$0</div>
+        <p class="calc-result-note" id="calcNote">Select services to see your estimate</p>
+        <a href="#contact" class="btn btn-primary" style="justify-content:center;">Request Exact Quote</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="why">
+  <div class="wrap">
+    <div class="section-head reveal-l">
+      <p class="section-eyebrow">Why partner with RENI?</p>
+      <h2>Built different, by design.</h2>
+    </div>
+    <div class="countries">
+      <div class="country-card reveal-l tilt-3d"><div class="country-flag">⚡</div><h5>Agility</h5><span>Lean, fast, and quick to adapt — no bureaucratic friction</span></div>
+      <div class="country-card reveal-r tilt-3d"><div class="country-flag">🎯</div><h5>Dedication</h5><span>Direct focus, intense commitment, high quality standards</span></div>
+      <div class="country-card reveal-l tilt-3d"><div class="country-flag">💰</div><h5>Cost-Efficiency</h5><span>High-end solutions designed for modern, realistic budgets</span></div>
+      <div class="country-card reveal-r tilt-3d"><div class="country-flag">🛠️</div><h5>Modern Tech Stack</h5><span>Contemporary frameworks, secure and maintainable standards</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="proof">
+  <div class="wrap">
+    <div class="proof reveal-r">
+      <p class="proof-quote">"To become a trusted global partner for businesses seeking smart digital transformation — proving that genuine passion, technical expertise, and absolute customer trust can redefine industry standards."</p>
+      <div class="proof-stats">
+        <div><div class="proof-stat-num">Trust</div><div class="proof-stat-label">Customer trust first</div></div>
+        <div><div class="proof-stat-num">Passion</div><div class="proof-stat-label">Driven by real experience</div></div>
+        <div><div class="proof-stat-num">Team</div><div class="proof-stat-label">Unshakeable belief</div></div>
+      </div>
+      <p class="proof-attr"><b>Our Vision Statement</b> — RENI Tech Services</p>
+    </div>
+  </div>
+</section>
+
+<section class="section final-cta" id="contact">
+  <div class="wrap">
+    <h2 class="reveal-l" style="margin:0 auto;">Ready to grow, or ready to build?</h2>
+    <p class="reveal-r">Tell us which — we'll bring the right minds on the team to it within a day.</p>
+    <div class="final-btns reveal-l">
+      <a href="#" class="btn btn-primary">Get a Free Consultation</a>
+      <a href="#" class="btn btn-secondary">Chat on WhatsApp</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-top">
+      <div>
+        <a href="#top" class="logo logo-brand logo-brand-footer">
+          <img src="assets/logo-mark.png" alt="RENI Tech Services logo" class="logo-img">
+          <span class="logo-text"><span class="logo-name">RENI</span><span class="logo-sub">Tech Services</span></span>
+        </a>
+        <p style="color:var(--muted);font-size:14px;margin-top:14px;max-width:32ch;">Innovation driven by passion &amp; trust — IT Solutions, Web &amp; Desktop Apps, Digital Marketing, and Brand Strategy.</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <h6>Marketing</h6>
+          <a href="#">Social Media Strategy</a>
+          <a href="#">SEO &amp; Visibility</a>
+          <a href="#">Campaign Planning</a>
+          <a href="#">Visual Branding</a>
+        </div>
+        <div class="footer-col">
+          <h6>IT Solutions</h6>
+          <a href="#">Web &amp; Desktop Apps</a>
+          <a href="#">Full-Stack Development</a>
+          <a href="#">API Integration</a>
+          <a href="#">IT Consulting</a>
+        </div>
+        <div class="footer-col">
+          <h6>Company</h6>
+          <a href="#why">Why RENI</a>
+          <a href="#pillars">Services</a>
+          <a href="#calculator">Estimate</a>
+          <a href="#contact">Contact</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 RENI Tech Services. All rights reserved.</span>
+      <span>IT Solutions • Web &amp; Desktop Apps • Digital Marketing • Brand Strategy</span>
+    </div>
+  </div>
+</footer>
+
+<div class="whatsapp-fab" id="waFab" role="button" aria-label="Chat on WhatsApp">
+  <svg width="28" height="28" viewBox="0 0 24 24" fill="white"><path d="M17.6 6.32A8.86 8.86 0 0012.05 4a8.94 8.94 0 00-7.75 13.4L3 21l3.7-1.25a8.9 8.9 0 004.35 1.13h0a8.94 8.94 0 008.93-8.94 8.86 8.86 0 00-2.38-6.62zM12.05 19.4h0a7.44 7.44 0 01-3.8-1.04l-.27-.16-2.83.93.9-2.76-.18-.28a7.42 7.42 0 01-1.15-3.98 7.45 7.45 0 0112.72-5.27 7.4 7.4 0 012.18 5.27 7.45 7.45 0 01-7.57 7.29zm4.08-5.58c-.22-.11-1.32-.65-1.53-.72s-.35-.11-.5.11-.58.72-.71.87-.26.16-.48.05a6.1 6.1 0 01-1.8-1.11 6.75 6.75 0 01-1.25-1.55c-.13-.22 0-.34.1-.45s.22-.26.33-.4a1.5 1.5 0 00.22-.36.4.4 0 000-.38c-.05-.11-.5-1.2-.68-1.64s-.36-.38-.5-.38h-.43a.82.82 0 00-.6.28 2.5 2.5 0 00-.78 1.86 4.34 4.34 0 00.91 2.3 9.94 9.94 0 003.8 3.36c.53.23.94.36 1.26.47a3 3 0 001.4.09 2.3 2.3 0 001.5-1.06 1.87 1.87 0 00.13-1.06c-.05-.1-.2-.16-.42-.27z"/></svg>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  gsap.registerPlugin(ScrollTrigger);
+
+  /* ---------- Nav scroll state ---------- */
+  const header = document.getElementById('siteHeader');
+  window.addEventListener('scroll', ()=>{
+    header.classList.toggle('scrolled', window.scrollY > 40);
+  });
+  const navToggle = document.getElementById('navToggle');
+  const navLinks = document.getElementById('navLinks');
+  navToggle.addEventListener('click', ()=> navLinks.classList.toggle('open'));
+  navLinks.querySelectorAll('a').forEach(a=> a.addEventListener('click', ()=> navLinks.classList.remove('open')));
+
+  /* ---------- Hero text reveal (letter/word stagger) ---------- */
+  const tl = gsap.timeline({defaults:{ease:'power4.out'}});
+  tl.to('#heroEyebrow',{opacity:1,duration:.6},0.1)
+    .to('.hero h1 .line span',{y:'0%',duration:1,stagger:0.12},0.2)
+    .to('#heroSub',{opacity:1,y:0,duration:.8},0.9)
+    .to('#heroBtns',{opacity:1,y:0,duration:.8},1.05)
+    .to('#scrollCue',{opacity:1,duration:.6},1.3)
+    .to('#hero-canvas',{opacity:1,duration:1.2},0.3);
+
+  /* ---------- Scroll-triggered reveals for sections ----------
+     NOTE: these use scrub instead of toggleActions/duration. With
+     toggleActions the tween always plays its own fixed duration
+     (0.9–1.1s) whenever a trigger point is crossed — so scrolling
+     back up fast (past several triggers) queues up a stack of
+     still-finishing animations and the page visibly lags behind
+     the scrollbar. Scrub locks each tween's progress directly to
+     scroll position instead, so reverse-scrolling is instant and
+     never falls behind, no matter how fast you scroll. The small
+     scrub number (0.35) just adds a touch of smoothing so it
+     doesn't feel mechanically linear. */
+  gsap.utils.toArray('.reveal').forEach((el)=>{
+    gsap.fromTo(el,
+      {opacity:0, y:36},
+      {
+        opacity:1, y:0, ease:'none',
+        scrollTrigger:{
+          trigger:el, start:'top 85%', end:'top 40%',
+          scrub:0.35
+        }
+      }
+    );
+  });
+
+  /* ---------- 3D directional reveals (left / right, staggered) ---------- */
+  const groupByParent = (nodes)=>{
+    const map = new Map();
+    nodes.forEach(el=>{
+      const parent = el.parentElement;
+      if(!map.has(parent)) map.set(parent, []);
+      map.get(parent).push(el);
+    });
+    return map;
+  };
+
+  ['.reveal-l','.reveal-r'].forEach(sel=>{
+    const nodes = gsap.utils.toArray(sel);
+    const byParent = groupByParent(nodes);
+    byParent.forEach((els)=>{
+      // Stagger is faked with a per-index scroll-position offset
+      // (rather than a time-based stagger) so it still works with
+      // scrub — each card's window starts/ends a little later than
+      // the one before it, in scroll terms, not clock terms.
+      els.forEach((el,i)=>{
+        const offset = i*3;
+        gsap.fromTo(el,
+          {opacity:0},
+          {
+            opacity:1, x:0, y:0, z:0, rotateY:0, scale:1, ease:'none',
+            scrollTrigger:{
+              trigger:els[0],
+              start:`top ${88-offset}%`,
+              end:`top ${35-offset}%`,
+              scrub:0.35
+            }
+          }
+        );
+      });
+    });
+  });
+
+  /* ---------- Mouse-tracked 3D tilt on cards ---------- */
+  const tiltEls = document.querySelectorAll('.tilt-3d');
+  const isFinePointer = window.matchMedia('(pointer:fine)').matches;
+  if(isFinePointer && !reduceMotionCheck()){
+    tiltEls.forEach(el=>{
+      const strength = 10;
+      const xTo = gsap.quickTo(el, 'rotationY', {duration:0.4, ease:'power3.out'});
+      const yTo = gsap.quickTo(el, 'rotationX', {duration:0.4, ease:'power3.out'});
+      const liftTo = gsap.quickTo(el, 'y', {duration:0.4, ease:'power3.out'});
+      el.addEventListener('mousemove',(e)=>{
+        const r = el.getBoundingClientRect();
+        const px = (e.clientX - r.left)/r.width - 0.5;
+        const py = (e.clientY - r.top)/r.height - 0.5;
+        xTo(px*strength);
+        yTo(-py*strength);
+        liftTo(-4);
+      });
+      el.addEventListener('mouseleave', ()=>{
+        xTo(0); yTo(0); liftTo(0);
+      });
+    });
+  }
+  function reduceMotionCheck(){
+    return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  }
+
+  /* ---------- Counter animation on trust bar ---------- */
+  gsap.utils.toArray('.trust-num').forEach((el)=>{
+    const target = parseInt(el.dataset.count,10);
+    const suffix = el.dataset.suffix || '';
+    ScrollTrigger.create({
+      trigger:el, start:'top 90%', once:true,
+      onEnter:()=>{
+        let obj = {val:0};
+        gsap.to(obj,{val:target,duration:1.6,ease:'power2.out',
+          onUpdate:()=>{ el.textContent = Math.round(obj.val)+suffix; }
+        });
+      }
+    });
+  });
+
+  /* ---------- Quote calculator ---------- */
+  const opts = document.querySelectorAll('.calc-opt');
+  const resultEl = document.getElementById('calcResult');
+  const noteEl = document.getElementById('calcNote');
+  let total = 0;
+  opts.forEach(opt=>{
+    opt.addEventListener('click', ()=>{
+      opt.classList.toggle('active');
+      total = 0;
+      let names = [];
+      opts.forEach(o=>{
+        if(o.classList.contains('active')){
+          total += parseInt(o.dataset.price,10);
+          names.push(o.dataset.name);
+        }
+      });
+      const low = total, high = Math.round(total*1.35);
+      gsap.to({}, {duration:0.3, onUpdate:function(){
+        resultEl.textContent = total === 0 ? '$0' : `$${low.toLocaleString()}–$${high.toLocaleString()}`;
+      }});
+      noteEl.textContent = names.length ? names.join(' + ') : 'Select services to see your estimate';
+    });
+  });
+
+  /* ---------- Three.js 3D node network hero ---------- */
+  const canvas = document.getElementById('hero-canvas');
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(55, window.innerWidth/window.innerHeight, 0.1, 1000);
+  camera.position.set(0,0,26);
+  const renderer = new THREE.WebGLRenderer({canvas, alpha:true, antialias:true});
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+  renderer.setSize(window.innerWidth, window.innerHeight);
+
+  const group = new THREE.Group();
+  scene.add(group);
+
+  // 4 "country" hub nodes + surrounding cluster nodes
+  const hubColors = [0xFFCB74, 0xE3A947, 0xD9D3C4, 0xFFCB74];
+  const hubs = [];
+  const hubPositions = [
+    new THREE.Vector3(9,4,-2),
+    new THREE.Vector3(-8,5,3),
+    new THREE.Vector3(-6,-6,-1),
+    new THREE.Vector3(7,-5,2)
+  ];
+  hubPositions.forEach((pos,i)=>{
+    const geo = new THREE.SphereGeometry(0.35,20,20);
+    const mat = new THREE.MeshBasicMaterial({color: hubColors[i]});
+    const mesh = new THREE.Mesh(geo,mat);
+    mesh.position.copy(pos);
+    group.add(mesh);
+    hubs.push(mesh);
+
+    const glowGeo = new THREE.SphereGeometry(0.7,16,16);
+    const glowMat = new THREE.MeshBasicMaterial({color: hubColors[i], transparent:true, opacity:0.12});
+    const glow = new THREE.Mesh(glowGeo, glowMat);
+    glow.position.copy(pos);
+    group.add(glow);
+  });
+
+  // scattered small nodes
+  const smallNodes = [];
+  const nodeGeo = new THREE.SphereGeometry(0.09,10,10);
+  const nodeMat = new THREE.MeshBasicMaterial({color:0x8C8780, transparent:true, opacity:0.55});
+  for(let i=0;i<70;i++){
+    const mesh = new THREE.Mesh(nodeGeo, nodeMat);
+    mesh.position.set(
+      (Math.random()-0.5)*36,
+      (Math.random()-0.5)*24,
+      (Math.random()-0.5)*14
+    );
+    group.add(mesh);
+    smallNodes.push(mesh);
+  }
+
+  // connecting lines between hubs (arcs)
+  function createArc(p1,p2,color){
+    const mid = p1.clone().lerp(p2,0.5);
+    mid.z += 6;
+    const curve = new THREE.QuadraticBezierCurve3(p1, mid, p2);
+    const points = curve.getPoints(40);
+    const geo = new THREE.BufferGeometry().setFromPoints(points);
+    const mat = new THREE.LineBasicMaterial({color, transparent:true, opacity:0.35});
+    return new THREE.Line(geo, mat);
+  }
+  for(let i=0;i<hubPositions.length;i++){
+    for(let j=i+1;j<hubPositions.length;j++){
+      group.add(createArc(hubPositions[i], hubPositions[j], 0xFFCB74));
+    }
+  }
+
+  // faint connecting lines from small nodes to nearest hub
+  smallNodes.forEach(n=>{
+    let nearest = hubPositions[0], minD = Infinity;
+    hubPositions.forEach(h=>{
+      const d = n.position.distanceTo(h);
+      if(d<minD){minD=d; nearest=h;}
+    });
+    if(minD < 14){
+      const geo = new THREE.BufferGeometry().setFromPoints([n.position, nearest]);
+      const mat = new THREE.LineBasicMaterial({color:0x524F49, transparent:true, opacity:0.5});
+      group.add(new THREE.Line(geo,mat));
+    }
+  });
+
+  let mouseX = 0, mouseY = 0;
+  window.addEventListener('mousemove', (e)=>{
+    mouseX = (e.clientX / window.innerWidth - 0.5);
+    mouseY = (e.clientY / window.innerHeight - 0.5);
+  });
+
+  let reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function animate(t){
+    requestAnimationFrame(animate);
+    if(!reduceMotion){
+      group.rotation.y += 0.0009;
+      group.rotation.x = mouseY*0.15;
+      group.rotation.y += mouseX*0.0006;
+      hubs.forEach((h,i)=>{
+        const s = 1 + Math.sin(t*0.0015 + i)*0.15;
+        h.scale.set(s,s,s);
+      });
+    }
+    renderer.render(scene, camera);
+  }
+  requestAnimationFrame(animate);
+
+  window.addEventListener('resize', ()=>{
+    camera.aspect = window.innerWidth/window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  });
+
+  /* ---------- WhatsApp FAB ---------- */
+  document.getElementById('waFab').addEventListener('click', ()=>{
+    window.open('https://wa.me/', '_blank');
+  });
+});
+</script>
+</body>
+</html>
