@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>RENI Tech Services — IT Solutions &amp; Digital Marketing in India</title>
-<meta name="description" content="RENI Tech Services builds websites, apps &amp; custom software, and runs social media, SEO &amp; digital marketing — plus Instagram reels, flash shoots &amp; promo videos from ₹1,500/video. Get an instant quote.">
+<meta name="description" content="RENI Tech Services builds websites, apps &amp; custom software, and runs social media, SEO &amp; digital marketing — plus Instagram reels, flash shoots &amp; promo videos. Get an instant quote.">
 <meta name="keywords" content="web development India, app development, custom software, digital marketing agency, social media management, Instagram reels shoot, SEO services India, RENI Tech Services">
 <meta name="robots" content="index, follow">
 <meta name="author" content="RENI Tech Services">
@@ -13,13 +13,13 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="RENI Tech Services">
 <meta property="og:title" content="RENI Tech Services — IT Solutions &amp; Digital Marketing">
-<meta property="og:description" content="Websites, apps &amp; custom software. Social media, SEO &amp; digital marketing. Instagram reels &amp; promo video shoots from ₹1,500/video.">
+<meta property="og:description" content="Websites, apps &amp; custom software. Social media, SEO &amp; digital marketing. Instagram reels &amp; promo video shoots.">
 <meta property="og:url" content="https://renitech-mqua.onrender.com/">
 <meta property="og:locale" content="en_IN">
 
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="RENI Tech Services — IT Solutions &amp; Digital Marketing">
-<meta name="twitter:description" content="Websites, apps &amp; custom software. Social media, SEO &amp; digital marketing. Instagram reels &amp; promo video shoots from ₹1,500/video.">
+<meta name="twitter:description" content="Websites, apps &amp; custom software. Social media, SEO &amp; digital marketing. Instagram reels &amp; promo video shoots.">
 
 <script type="application/ld+json">
 {
@@ -544,7 +544,7 @@ animation:ripple 2.2s infinite;z-index:-1;
 </div>
 <div class="service-card reveal-r tilt-3d">
 <div class="service-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg></div>
-<h5>Reels, Flash Shoots &amp; Promo Videos</h5><p>Full-day or flash shoots, shot and edited for Instagram Reels and promo content — ₹1,500 per video, capturing to final edit.</p>
+<h5>Reels, Flash Shoots &amp; Promo Videos</h5><p>Full-day or flash shoots, shot and edited for Instagram Reels and promo content — full capturing to final edit.</p>
 </div>
 <div class="service-card reveal-r tilt-3d">
 <div class="service-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 21l-4.35-4.35"/><circle cx="10" cy="10" r="7"/></svg></div>
@@ -576,38 +576,38 @@ animation:ripple 2.2s infinite;z-index:-1;
 <div id="calcOptions">
 <div class="calc-opt" data-price="29000" data-name="Website / Desktop App">
 <div class="calc-opt-label"><span class="checkbox"></span> Custom Web &amp; Desktop App</div>
-<span class="calc-opt-price">from ₹29,000</span>
+
 </div>
 <div class="calc-opt" data-price="20000" data-name="SEO">
 <div class="calc-opt-label"><span class="checkbox"></span> SEO &amp; Online Visibility</div>
-<span class="calc-opt-price">from ₹20,000/mo</span>
+
 </div>
 <div class="calc-opt" data-price="23000" data-name="Social & Campaigns">
 <div class="calc-opt-label"><span class="checkbox"></span> Social Media &amp; Campaign Management</div>
-<span class="calc-opt-price">from ₹23,000/mo</span>
+
 </div>
 <div class="calc-opt" data-price="37000" data-name="API / Automation">
 <div class="calc-opt-label"><span class="checkbox"></span> API Integration &amp; Automation</div>
-<span class="calc-opt-price">from ₹37,000</span>
+
 </div>
 <div class="calc-opt" data-price="41000" data-name="Custom Software">
 <div class="calc-opt-label"><span class="checkbox"></span> Full-Stack / Custom Software</div>
-<span class="calc-opt-price">from ₹41,000</span>
+
 </div>
 <div class="calc-opt" data-price="25000" data-name="Branding">
 <div class="calc-opt-label"><span class="checkbox"></span> Visual Branding &amp; Content</div>
-<span class="calc-opt-price">from ₹25,000</span>
+
 </div>
 </div>
 </div>
 <div class="calc-result reveal-r tilt-3d">
-<p class="calc-result-label">Estimated Range</p>
-<div class="calc-result-num" id="calcResult">₹0</div>
-<p class="calc-result-note" id="calcNote">Select services to see your estimate</p>
+<p class="calc-result-label">Your Package</p>
+<div class="calc-result-num" id="calcResult" style="font-size:clamp(18px,2.4vw,26px);">Custom Quote</div>
+<p class="calc-result-note" id="calcNote">Select services to build your package</p>
 <a href="#contact" class="btn btn-primary" style="justify-content:center;" onclick="selectFormTab('quote')">Request Exact Quote</a>
 </div>
 </div>
-<p class="calc-sub" style="margin-top:20px;">Reels, flash shoots &amp; promo videos are priced separately at a flat <strong style="color:var(--text);">₹1,500 per video</strong> — full capturing and editing included.</p>
+<p class="calc-sub" style="margin-top:20px;">Reels, flash shoots &amp; promo videos are priced separately — full capturing and editing included. <a href="#contact" onclick="selectFormTab('quote')" style="color:var(--teal);">Request a quote →</a></p>
 </div>
 </section>
 
@@ -910,23 +910,17 @@ onUpdate:()=>{ el.textContent = Math.round(obj.val)+suffix; }
 const opts = document.querySelectorAll('.calc-opt');
 const resultEl = document.getElementById('calcResult');
 const noteEl = document.getElementById('calcNote');
-let total = 0;
 opts.forEach(opt=>{
 opt.addEventListener('click', ()=>{
 opt.classList.toggle('active');
-total = 0;
 let names = [];
 opts.forEach(o=>{
 if(o.classList.contains('active')){
-total += parseInt(o.dataset.price,10);
 names.push(o.dataset.name);
 }
 });
-const low = total, high = Math.round(total*1.35);
-gsap.to({}, {duration:0.3, onUpdate:function(){
-resultEl.textContent = total === 0 ? '₹0' : `₹${low.toLocaleString('en-IN')}–₹${high.toLocaleString('en-IN')}`;
-}});
-noteEl.textContent = names.length ? names.join(' + ') : 'Select services to see your estimate';
+resultEl.textContent = names.length ? names.length + (names.length === 1 ? ' Service' : ' Services') : 'Custom Quote';
+noteEl.textContent = names.length ? names.join(' + ') : 'Select services to build your package';
 });
 });
 
