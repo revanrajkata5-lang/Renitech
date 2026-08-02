@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://renitech-mqua.onrender.com/sitemap.xml
